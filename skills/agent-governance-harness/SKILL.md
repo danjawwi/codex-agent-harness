@@ -29,6 +29,7 @@ The Project Manager and Requirements Manager may be combined in smaller projects
 
 Open these only when needed:
 
+- `references/orchestration/`: lifecycle, dispatch, and state-transition runbooks
 - `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
 - `references/schemas/task.schema.json`: task contract for bounded executor work

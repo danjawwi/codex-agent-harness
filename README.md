@@ -256,6 +256,7 @@ inherit from.
 
 - `AGENTS.md`: high-level governance defaults for Codex
 - `config/harness-config.toml`: optional Codex config values for long-context work
+- `orchestration/`: project lifecycle, dispatch logic, and state-transition rules
 - `roles/`: role contracts for planning, execution, inspection, and recording
 - `schemas/`: first-pass task, backlog, and log schemas
 - `templates/`: starter artifacts for project runtime and milestone reporting
@@ -291,10 +292,9 @@ micro-step.
 
 The next iterations of this repository should define:
 
-- concrete role interfaces for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
-- task schemas and dependency graph formats
-- inspection schemas and repair loops
-- milestone definitions and handoff criteria
+- deeper dependency-graph formats beyond the first-pass task and milestone model
+- richer inspection and repair contracts
+- milestone handoff automation and reporting formats
 - release and publish governance for completed agent work
 - specialized harness packages that extend the shared base model
 
