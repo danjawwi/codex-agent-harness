@@ -34,7 +34,9 @@ Open these only when needed:
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
 - `references/schemas/task.schema.json`: task contract for bounded executor work
 - `references/schemas/log-entry.schema.json`: structured logging contract
-- `references/templates/`: starter artifacts for `project.md`, `current.md`, `log.md`, `backlog.json`, and milestone reports
+- `references/schemas/inspection.schema.json`: inspection record contract
+- `references/schemas/repair.schema.json`: repair record contract
+- `references/templates/`: starter artifacts for `project.md`, `current.md`, `log.md`, `backlog.json`, inspection reports, repair plans, and milestone reports
 
 ## Default Artifact Layout
 

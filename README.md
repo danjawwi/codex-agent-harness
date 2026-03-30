@@ -258,8 +258,8 @@ inherit from.
 - `config/harness-config.toml`: optional Codex config values for long-context work
 - `orchestration/`: project lifecycle, dispatch logic, and state-transition rules
 - `roles/`: role contracts for planning, execution, inspection, and recording
-- `schemas/`: first-pass task, backlog, and log schemas
-- `templates/`: starter artifacts for project runtime and milestone reporting
+- `schemas/`: first-pass task, backlog, log, inspection, and repair schemas
+- `templates/`: starter artifacts for project runtime, inspection, repair, and milestone reporting
 - `skills/agent-governance-harness/`: the reusable skill and runtime initializer
 - `scripts/install.sh`: syncs the harness assets into `~/.codex`
 
@@ -293,7 +293,7 @@ micro-step.
 The next iterations of this repository should define:
 
 - deeper dependency-graph formats beyond the first-pass task and milestone model
-- richer inspection and repair contracts
+- automation around inspection and repair record creation
 - milestone handoff automation and reporting formats
 - release and publish governance for completed agent work
 - specialized harness packages that extend the shared base model

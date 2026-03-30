@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/repair.schema.json",
+  "title": "Harness Repair Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "repair_id",
+    "timestamp",
+    "task_id",
+    "source_inspection_id",
+    "owner",
+    "status",
+    "summary"
+  ],
+  "properties": {
+    "repair_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_inspection_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "requested",
+        "in_progress",
+        "done",
+        "blocked"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requested_fixes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "applied_changes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "verification_after_repair": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "remaining_risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
