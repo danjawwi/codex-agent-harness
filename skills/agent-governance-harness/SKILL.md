@@ -25,6 +25,16 @@ Default functional roles:
 
 The Project Manager and Requirements Manager may be combined in smaller projects.
 
+## References
+
+Open these only when needed:
+
+- `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
+- `references/schemas/backlog.schema.json`: backlog and milestone structure
+- `references/schemas/task.schema.json`: task contract for bounded executor work
+- `references/schemas/log-entry.schema.json`: structured logging contract
+- `references/templates/`: starter artifacts for `project.md`, `current.md`, `log.md`, `backlog.json`, and milestone reports
+
 ## Default Artifact Layout
 
 Use `.codex-harness/` in the project root. If it does not exist, initialize it with:

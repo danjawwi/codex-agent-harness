@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/log-entry.schema.json",
+  "title": "Harness Log Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "timestamp",
+    "role",
+    "event_type",
+    "summary"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "project_manager",
+        "requirements_manager",
+        "executor",
+        "inspector",
+        "recorder",
+        "system"
+      ]
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "task_started",
+        "task_completed",
+        "inspection_passed",
+        "inspection_failed",
+        "repair_requested",
+        "repair_completed",
+        "milestone_started",
+        "milestone_completed",
+        "blocker_raised",
+        "decision_recorded",
+        "status_reported"
+      ]
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "milestone_id": {
+      "type": "string"
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "details": {
+      "type": "string"
+    }
+  }
+}

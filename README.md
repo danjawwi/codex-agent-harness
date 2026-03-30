@@ -256,6 +256,9 @@ inherit from.
 
 - `AGENTS.md`: high-level governance defaults for Codex
 - `config/harness-config.toml`: optional Codex config values for long-context work
+- `roles/`: role contracts for planning, execution, inspection, and recording
+- `schemas/`: first-pass task, backlog, and log schemas
+- `templates/`: starter artifacts for project runtime and milestone reporting
 - `skills/agent-governance-harness/`: the reusable skill and runtime initializer
 - `scripts/install.sh`: syncs the harness assets into `~/.codex`
 

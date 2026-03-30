@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "created_at": "{{CREATED_AT}}",
+  "project_goal": "{{GOAL}}",
+  "status_values": [
+    "pending",
+    "ready",
+    "in_progress",
+    "blocked",
+    "done"
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Define first delivery milestone",
+      "goal": "Replace this with the first integrated delivery objective.",
+      "status": "ready",
+      "depends_on": [],
+      "acceptance_checks": [
+        "Milestone goal is clear and user-meaningful."
+      ],
+      "notes": "Edit this milestone before dispatching work."
+    }
+  ],
+  "features": []
+}
