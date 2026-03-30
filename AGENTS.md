@@ -1,13 +1,17 @@
 # Global Agent Governance
 
-For multi-step or long-horizon work, prefer a file-backed harness over chat-memory-only execution.
+For multi-step or long-horizon work, prefer a file-backed, role-based harness over chat-memory-only
+execution.
 
-- If the task is larger than one meaningful feature, use `.codex-harness/` in the project root.
-- Keep these files as the source of truth: `project.md`, `backlog.json`, `current.md`, `log.md`.
-- Run an initializer once: restate the goal, constraints, and 5-10 concrete features with acceptance checks.
-- Run workers in a single-feature loop: pick exactly one ready feature, implement it, verify it, then update artifacts.
-- Do not batch multiple backlog items in one cycle unless the user explicitly asks for that tradeoff.
-- After each cycle, record touched files, verification, blockers, and the recommended next feature in `log.md`.
-- When a thread resumes or context is compacted, reload the harness files first and trust them over chat history.
-- Prefer commit-sized diffs and best-effort verification after each completed feature.
-- When the user asks for harness/governance/long-running-agent behavior, use the `agent-governance-harness` skill.
+- Use `.codex-harness/` in the project root as the source of truth for project state.
+- Treat the harness as a delivery system, not a single-step conversational loop.
+- Default governance roles are: Project Manager, Requirements Manager, Executors, Inspectors, and Recorder.
+- The Project Manager owns orchestration, dependency order, parallelism, and milestone completion.
+- The Requirements Manager turns the user goal into testable work packages, constraints, and acceptance checks.
+- Executors perform bounded tasks. Each Executor should own one clear task at a time, even when the overall harness is running multiple tasks in parallel.
+- Inspectors validate outputs continuously and return defects for immediate repair.
+- The Recorder keeps the execution trail current across planning, implementation, validation, repair, and delivery.
+- Advance work until a meaningful milestone is complete or a real blocker requires escalation.
+- Do not stop after every micro-step to ask what to do next.
+- Prefer milestone-level reporting with integrated status, completed work, validation outcomes, and remaining risks.
+- When the user asks for harness, governance, long-running agent execution, delivery orchestration, or multi-agent coordination, use the `agent-governance-harness` skill.

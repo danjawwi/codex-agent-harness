@@ -44,9 +44,22 @@ Created: {created_at}
 
 - Fill in product, technical, or timeline constraints.
 
+## Governance Model
+
+- Project Manager: orchestrates the overall flow and milestone completion.
+- Requirements Manager: decomposes the goal into testable work.
+- Executors: implement bounded tasks.
+- Inspectors: validate outputs and return defects for repair.
+- Recorder: maintains the execution trail.
+
 ## Repo Facts
 
 - Fill in important facts discovered from the codebase.
+
+## Milestone Strategy
+
+- Define the current delivery milestone here.
+- Note which streams can run in parallel and which must run in sequence.
 
 ## Definition Of Done
 
@@ -58,6 +71,7 @@ Created: {created_at}
         "created_at": created_at,
         "project_goal": goal,
         "status_values": ["pending", "ready", "in_progress", "blocked", "done"],
+        "milestones": [],
         "features": [],
     }
 
@@ -65,21 +79,26 @@ Created: {created_at}
 
 Updated: {created_at}
 
-## Feature
+## Active Milestone
 
-None selected yet.
+Define the current milestone here.
+
+## Active Tasks
+
+- List the tasks currently in motion.
+- Keep each executor on one clear task at a time.
 
 ## Acceptance Checks
 
-- Add checks for the single active feature here.
+- Add milestone-level and task-level checks here.
 
 ## Planned Verification
 
-- Add the exact verification steps for the active feature here.
+- Add the exact verification steps for the current tasks here.
 
-## Notes
+## Integration Notes
 
-- Add implementation notes for the active feature here.
+- Record cross-task dependencies, merge points, and follow-up repair needs here.
 """
 
     log_md = f"""# Harness Log

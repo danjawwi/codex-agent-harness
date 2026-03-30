@@ -1,15 +1,29 @@
 ---
 name: agent-governance-harness
-description: Use when the user wants long-running agent governance, Anthropic-style harness behavior, feature-by-feature execution, external state artifacts, project initialization, backlog-driven work, or single-feature constraints in Codex.
+description: Use when the user wants long-running agent governance, role-based multi-agent orchestration, milestone-driven execution, external state artifacts, execution inspection, repair loops, backlog-driven work, or Codex delivery harness behavior.
 ---
 
 # Agent Governance Harness
 
-Use this skill when the user asks for a harness, governance, long-horizon work, external state, initializer-worker-artifact patterns, or single-feature execution.
+Use this skill when the user asks for a harness, governance, long-horizon work, multi-agent
+delivery, external state, project decomposition, inspection loops, or milestone-based execution.
 
 ## Goal
 
-Run project work from disk-backed artifacts instead of relying on conversation memory.
+Run project work as a sustained, role-based delivery process backed by disk artifacts instead of
+relying on conversation memory alone.
+
+## Governance Model
+
+Default functional roles:
+
+- `Project Manager`: owns orchestration, dependency order, milestone boundaries, and overall flow
+- `Requirements Manager`: turns the user goal into work packages, acceptance checks, and constraints
+- `Executors`: implement bounded tasks and produce concrete artifacts
+- `Inspectors`: validate work continuously and return defects for repair
+- `Recorder`: records decisions, state changes, progress, blockers, repairs, and outcomes
+
+The Project Manager and Requirements Manager may be combined in smaller projects.
 
 ## Default Artifact Layout
 
@@ -21,56 +35,66 @@ python3 ~/.codex/skills/agent-governance-harness/scripts/init_harness.py --root 
 
 Default files:
 
-- `project.md`: goal, constraints, repo facts, definition of done
-- `backlog.json`: 5-10 concrete features with status and acceptance checks
-- `current.md`: the one feature currently being executed
-- `log.md`: append-only record of verification, blockers, touched files, and next step
+- `project.md`: goal, constraints, governance model, repo facts, and definition of done
+- `backlog.json`: workstreams, tasks, states, dependencies, acceptance checks, and notes
+- `current.md`: active milestone, active tasks, planned verification, and integration notes
+- `log.md`: append-only record of execution, inspection, repairs, blockers, and milestone outcomes
 
 ## Initializer
 
-Run once per project, or again only if scope changed enough that the old backlog is no longer valid.
+Run once per project, or again only if the scope changed enough that the old plan is no longer
+reliable.
 
 - Read the repo and user request before planning.
-- Write the project goal, constraints, and done definition to `project.md`.
-- Break the work into 5-10 concrete features in `backlog.json`.
-- Make features commit-sized: one worker cycle should usually finish one feature.
-- Promote only features with clear acceptance checks to `ready`.
+- Define the project goal, constraints, and done definition in `project.md`.
+- Split the request into 5-10 major workstreams, features, or delivery slices.
+- For each slice, define acceptance checks and key dependencies.
+- Mark which work can run in parallel and which must run in order.
+- Establish the first milestone rather than only the first tiny task.
 
-## Worker Loop
+## Execution Model
 
-For each execution cycle:
+The harness should not stop after every small action.
+
+Default cycle:
 
 1. Re-read `.codex-harness/` artifacts.
-2. Pick exactly one `ready` feature.
-3. Copy its title, acceptance checks, and planned verification into `current.md`.
-4. Implement only that feature.
-5. Run best-effort verification for that feature.
-6. Update `backlog.json`, `current.md`, and `log.md`.
-7. Stop after that feature unless the user explicitly asks to continue.
+2. Select the current milestone or delivery slice.
+3. Dispatch ready tasks across one or more Executors.
+4. Keep each Executor on one clear task at a time.
+5. Run Inspectors continuously as work completes.
+6. Repair failures immediately when practical.
+7. Record all task transitions and validation outcomes in `log.md`.
+8. Continue until the milestone is complete or a real blocker requires escalation.
+9. Report back with an integrated milestone update.
 
-## Single-Feature Constraint
+## Parallel And Sequential Work
 
-- Do not work on two backlog items in the same cycle.
-- If you notice follow-up work, record it and leave it for the next cycle.
-- Prefer small, reviewable diffs over large end-to-end rewrites.
+- Use parallel execution when tasks are bounded, independent enough, and safe to validate separately.
+- Use sequential execution when downstream work depends on upstream outputs or inspections.
+- Let the Project Manager choose the dependency strategy; Executors should not decide global flow on their own.
 
-## Artifact Rules
+## Inspector Rules
 
-- Disk artifacts are the source of truth after compaction, resume, or a new thread.
-- Chat summaries stay short; important state goes into the harness files.
-- Record blockers and assumptions in `log.md`, not only in the assistant message.
-- If verification is skipped or partial, write that down explicitly.
+- Do not accept "implemented" as "done" without validation.
+- Check that artifacts exist, behavior matches the requirement, and relevant verification has been run.
+- When a failure is found, route it back for repair and keep the overall project moving if possible.
+- Inspect planning quality too when decomposition or acceptance criteria look weak.
 
-## Suggested Status Values
+## Recorder Rules
 
-Keep feature status to:
+- Important state belongs in artifacts, not only in chat replies.
+- Record progress, defects, repairs, and milestone outcomes as they happen.
+- Keep the project resumable after compaction, interruption, or thread changes.
+- Preserve enough detail for audit and replay, but keep logs concise and structured.
 
-- `pending`
-- `ready`
-- `in_progress`
-- `blocked`
-- `done`
+## Reporting Cadence
+
+- Prefer milestone-level feedback over micro-step feedback.
+- Escalate early only for real blockers, unsafe assumptions, or decisions with non-obvious consequences.
+- Otherwise continue executing, inspecting, and integrating until a meaningful stage is complete.
 
 ## Small-Task Shortcut
 
-If the task is a single small edit, the full harness is optional. For anything that feels like a project, use the harness.
+If the task is a single tiny edit, the full harness is optional. For anything that feels like a
+project, use the harness.
