@@ -256,10 +256,11 @@ inherit from.
 
 - `AGENTS.md`: high-level governance defaults for Codex
 - `config/harness-config.toml`: optional Codex config values for long-context work
+- `mechanisms/`: always-on execution and memory mechanisms
 - `orchestration/`: project lifecycle, dispatch logic, and state-transition rules
 - `roles/`: role contracts for planning, execution, inspection, and recording
-- `schemas/`: first-pass task, backlog, log, inspection, and repair schemas
-- `templates/`: starter artifacts for project runtime, inspection, repair, and milestone reporting
+- `schemas/`: task, backlog, log, inspection, repair, and memory schemas
+- `templates/`: starter artifacts for runtime, memory, inspection, repair, and milestone reporting
 - `skills/agent-governance-harness/`: the reusable skill and runtime initializer
 - `scripts/install.sh`: syncs the harness assets into `~/.codex`
 
@@ -277,6 +278,19 @@ This installs:
 The config file is stored separately on purpose because personal Codex installs often already have
 their own model, MCP, and environment settings.
 
+## Mechanism-Based Defaults
+
+The harness is designed so you do not need to name these behaviors manually in each prompt.
+
+When the harness is active, it should automatically apply:
+
+- search-before-ask behavior
+- high-agency execution and verification discipline
+- Git-backed project memory
+
+Those mechanisms are documented in `mechanisms/` and referenced by both `AGENTS.md` and the
+installed harness skill.
+
 ## Typical Usage
 
 Inside a project:
@@ -287,6 +301,53 @@ python3 ~/.codex/skills/agent-governance-harness/scripts/init_harness.py --root 
 
 Then instruct Codex to use the harness and drive the project toward a milestone, not just a single
 micro-step.
+
+To synchronize project memory through GitHub from any harness-managed repo:
+
+```bash
+bash ~/.codex/skills/agent-governance-harness/scripts/sync_harness_memory.sh "$PWD"
+```
+
+## Memory Strategy
+
+This harness now treats memory as a first-class project artifact.
+
+The baseline approach is not hidden model memory. It is Git-backed working memory stored inside the
+project under `.codex-harness/memory/`.
+
+That gives us:
+
+- local persistence
+- GitHub synchronization
+- human readability
+- auditability
+- multi-person collaboration through normal Git workflows
+
+This is the current recommended replacement for relying on Codex internal memories as the primary
+operational layer.
+
+## External Inspirations
+
+Two external systems informed this design:
+
+- [`tanweai/pua`](https://github.com/tanweai/pua): stronger execution persistence, search-first behavior, and verification before declaring success
+- [`thedotmack/claude-mem`](https://github.com/thedotmack/claude-mem): persistent memory, session continuity, and durable context retrieval
+
+We do not expose them as prompt-time dependencies. We translate their strongest effects into harness
+mechanisms that become default behavior once the harness is in control.
+
+## Collaboration Model
+
+The current team model is simple on purpose:
+
+- `.codex-harness/` lives inside the project repo
+- `.codex-harness/memory/` is committed to Git
+- GitHub acts as the remote shared memory layer
+- collaborators pull, continue, inspect, repair, and push back updated memory state
+- `handoff.md`, `decision-log.md`, and `observations.ndjson` are the key continuity artifacts
+
+This gives us a practical multi-person workflow now, without waiting for a hidden platform memory
+system to mature.
 
 ## Near-Term Evolution
 

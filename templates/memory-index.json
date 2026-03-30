@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "project": "{{PROJECT_NAME}}",
+  "last_updated_at": "{{CREATED_AT}}",
+  "active_milestone": "M1",
+  "files": {
+    "active_context": ".codex-harness/memory/active-context.md",
+    "observations": ".codex-harness/memory/observations.ndjson",
+    "decision_log": ".codex-harness/memory/decision-log.md",
+    "handoff": ".codex-harness/memory/handoff.md",
+    "project_summary": ".codex-harness/memory/project-summary.md"
+  }
+}

@@ -24,6 +24,18 @@ def render_template(path: Path, replacements: dict[str, str]) -> str:
     return content
 
 
+def resolve_templates_dir() -> Path:
+    installed_dir = Path(__file__).resolve().parents[1] / "references" / "templates"
+    if installed_dir.exists():
+        return installed_dir
+
+    repo_dir = Path(__file__).resolve().parents[3] / "templates"
+    if repo_dir.exists():
+        return repo_dir
+
+    raise FileNotFoundError("Could not locate harness templates directory.")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Initialize a file-backed Codex governance harness.")
     parser.add_argument("--root", default=".", help="Project root where .codex-harness will be created.")
@@ -34,24 +46,40 @@ def main() -> int:
     root = Path(args.root).expanduser().resolve()
     harness_dir = root / ".codex-harness"
     harness_dir.mkdir(parents=True, exist_ok=True)
-    references_dir = Path(__file__).resolve().parents[1] / "references" / "templates"
+    memory_dir = harness_dir / "memory"
+    memory_dir.mkdir(parents=True, exist_ok=True)
+    references_dir = resolve_templates_dir()
 
     created_at = utc_now()
     goal = args.goal.strip()
+    project_name = root.name
     replacements = {
         "CREATED_AT": created_at,
-        "GOAL": goal or "Fill in the concrete user goal here."
+        "GOAL": goal or "Fill in the concrete user goal here.",
+        "PROJECT_NAME": project_name
     }
 
     project_md = render_template(references_dir / "project.md", replacements)
     backlog_json = render_template(references_dir / "backlog.json", replacements)
     current_md = render_template(references_dir / "current.md", replacements)
     log_md = render_template(references_dir / "log.md", replacements)
+    memory_index = render_template(references_dir / "memory-index.json", replacements)
+    active_context = render_template(references_dir / "active-context.md", replacements)
+    decision_log = render_template(references_dir / "decision-log.md", replacements)
+    handoff = render_template(references_dir / "handoff.md", replacements)
+    project_summary = render_template(references_dir / "project-summary.md", replacements)
+    observations = render_template(references_dir / "observations.ndjson", replacements)
 
     write_if_missing(harness_dir / "project.md", project_md, args.force)
     write_if_missing(harness_dir / "backlog.json", backlog_json, args.force)
     write_if_missing(harness_dir / "current.md", current_md, args.force)
     write_if_missing(harness_dir / "log.md", log_md, args.force)
+    write_if_missing(memory_dir / "memory-index.json", memory_index, args.force)
+    write_if_missing(memory_dir / "active-context.md", active_context, args.force)
+    write_if_missing(memory_dir / "decision-log.md", decision_log, args.force)
+    write_if_missing(memory_dir / "handoff.md", handoff, args.force)
+    write_if_missing(memory_dir / "project-summary.md", project_summary, args.force)
+    write_if_missing(memory_dir / "observations.ndjson", observations, args.force)
 
     print(f"Initialized harness at {harness_dir}")
     return 0

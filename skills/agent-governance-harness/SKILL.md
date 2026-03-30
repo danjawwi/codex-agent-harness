@@ -25,15 +25,27 @@ Default functional roles:
 
 The Project Manager and Requirements Manager may be combined in smaller projects.
 
+## Always-On Mechanisms
+
+When this harness is active, apply these mechanisms by default without waiting for the user to
+explicitly invoke them as separate skills:
+
+- `search-before-ask`
+- `high-agency-execution`
+- `git-backed-memory`
+
 ## References
 
 Open these only when needed:
 
+- `references/mechanisms/`: default harness mechanisms inspired by search-first execution, PUA-style persistence, and persistent memory systems
 - `references/orchestration/`: lifecycle, dispatch, and state-transition runbooks
 - `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
 - `references/schemas/task.schema.json`: task contract for bounded executor work
 - `references/schemas/log-entry.schema.json`: structured logging contract
+- `references/schemas/memory-observation.schema.json`: observation memory record contract
+- `references/schemas/memory-index.schema.json`: memory file index contract
 - `references/schemas/inspection.schema.json`: inspection record contract
 - `references/schemas/repair.schema.json`: repair record contract
 - `references/templates/`: starter artifacts for `project.md`, `current.md`, `log.md`, `backlog.json`, inspection reports, repair plans, and milestone reports
@@ -52,6 +64,13 @@ Default files:
 - `backlog.json`: workstreams, tasks, states, dependencies, acceptance checks, and notes
 - `current.md`: active milestone, active tasks, planned verification, and integration notes
 - `log.md`: append-only record of execution, inspection, repairs, blockers, and milestone outcomes
+- `memory/`: active context, observations, decision log, handoff, and project summary
+
+To synchronize `.codex-harness/` through GitHub when needed:
+
+```bash
+bash ~/.codex/skills/agent-governance-harness/scripts/sync_harness_memory.sh "$PWD"
+```
 
 ## Initializer
 
@@ -106,6 +125,14 @@ Default cycle:
 - Prefer milestone-level feedback over micro-step feedback.
 - Escalate early only for real blockers, unsafe assumptions, or decisions with non-obvious consequences.
 - Otherwise continue executing, inspecting, and integrating until a meaningful stage is complete.
+
+## Memory Practice
+
+- Read memory files at session start before resuming work.
+- Write important state into memory files during execution.
+- Prefer Git-backed project memory over hidden chat-only state.
+- For team collaboration, commit `.codex-harness/` memory files so GitHub becomes the shared remote memory layer.
+- Use `handoff.md` and `observations.ndjson` as the minimum shared continuity surface for multi-person collaboration.
 
 ## Small-Task Shortcut
 

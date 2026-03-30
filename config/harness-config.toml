@@ -5,3 +5,14 @@ model_auto_compact_token_limit = 800000
 
 [features]
 multi_agent = true
+
+[mechanisms]
+search_before_ask = true
+high_agency_execution = true
+git_backed_memory = true
+
+[memory]
+directory = ".codex-harness/memory"
+sync_transport = "git"
+remote_store = "github"
+team_mode = "shared-repo"

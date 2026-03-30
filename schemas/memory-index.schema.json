@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/memory-index.schema.json",
+  "title": "Harness Memory Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "project",
+    "last_updated_at",
+    "active_milestone",
+    "files"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "last_updated_at": {
+      "type": "string"
+    },
+    "active_milestone": {
+      "type": "string"
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "active_context",
+        "observations",
+        "decision_log",
+        "handoff",
+        "project_summary"
+      ],
+      "properties": {
+        "active_context": {
+          "type": "string"
+        },
+        "observations": {
+          "type": "string"
+        },
+        "decision_log": {
+          "type": "string"
+        },
+        "handoff": {
+          "type": "string"
+        },
+        "project_summary": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
