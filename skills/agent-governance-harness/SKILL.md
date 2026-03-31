@@ -43,11 +43,13 @@ Open these only when needed:
 - `references/orchestration/ambiguity-and-expansion.md`: optional expansion-level behavior for under-specified requests
 - `references/orchestration/observability-and-trace.md`: trace, dashboard, and progress-visibility rules
 - `references/orchestration/checkpoints-and-replay.md`: checkpoint capture, replay, and handoff safety rules
+- `references/orchestration/control-plane.md`: split-screen browser control plane for live governance visibility
 - `references/orchestration/human-approval.md`: optional approval gates for higher-risk actions
 - `references/orchestration/knowledge-operations.md`: reusable knowledge capture distinct from per-project memory
 - `references/orchestration/light-eval.md`: first-pass milestone eval practice
 - `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
+- `references/schemas/branch-graph.schema.json`: branch graph and fork display contract
 - `references/schemas/trace-event.schema.json`: structured trace event contract
 - `references/schemas/checkpoint-index.schema.json`: checkpoint index contract
 - `references/schemas/approval-gates.schema.json`: optional approval gate contract
@@ -79,6 +81,7 @@ Default files:
 - `observability/trace.ndjson`: structured execution trace
 - `checkpoints/checkpoints.json`: resumable checkpoint records
 - `approvals/approvals.json`: optional approval-gate records
+- `branches/branches.json`: branch graph records for execution forks and active line display
 - `knowledge/knowledge-index.json`: reusable cross-project knowledge records
 - `evals/eval-suite.json`: lightweight milestone eval cases
 
@@ -87,6 +90,17 @@ To synchronize `.codex-harness/` through GitHub when needed:
 ```bash
 bash ~/.codex/skills/agent-governance-harness/scripts/sync_harness_memory.sh "$PWD"
 ```
+
+To run the live control plane:
+
+```bash
+python3 ~/.codex/skills/agent-governance-harness/scripts/serve_control_plane.py --root "$PWD" --port 8765
+```
+
+Recommended setup:
+
+- keep primary task input in the Codex client
+- keep the browser control plane open on another screen for governance visibility and optional approval actions
 
 ## Initializer
 

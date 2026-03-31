@@ -1,14 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/approval-gates.schema.json",
-  "title": "Harness Approval Gates",
+  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/branch-graph.schema.json",
+  "title": "Harness Branch Graph",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "version",
     "project",
-    "enabled",
-    "gates"
+    "branches"
   ],
   "properties": {
     "version": {
@@ -19,25 +18,22 @@
       "type": "string",
       "minLength": 1
     },
-    "enabled": {
-      "type": "boolean"
-    },
-    "gates": {
+    "branches": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/gate"
+        "$ref": "#/$defs/branch"
       }
     }
   },
   "$defs": {
-    "gate": {
+    "branch": {
       "type": "object",
       "additionalProperties": false,
       "required": [
         "id",
-        "requested_at",
+        "title",
         "status",
-        "action_type",
+        "created_at",
         "summary"
       ],
       "properties": {
@@ -45,39 +41,33 @@
           "type": "string",
           "minLength": 1
         },
-        "requested_at": {
-          "type": "string"
+        "title": {
+          "type": "string",
+          "minLength": 1
         },
         "status": {
           "type": "string",
           "enum": [
-            "pending",
-            "approved",
-            "rejected",
-            "changes_requested"
+            "active",
+            "paused",
+            "completed",
+            "abandoned"
           ]
         },
-        "action_type": {
-          "type": "string",
-          "minLength": 1
-        },
-        "milestone_id": {
+        "created_at": {
           "type": "string"
         },
-        "task_id": {
+        "parent_branch_id": {
+          "type": "string"
+        },
+        "parent_checkpoint_id": {
           "type": "string"
         },
         "summary": {
           "type": "string",
           "minLength": 1
         },
-        "decision_by": {
-          "type": "string"
-        },
-        "decided_at": {
-          "type": "string"
-        },
-        "decision_summary": {
+        "current_milestone_id": {
           "type": "string"
         }
       }

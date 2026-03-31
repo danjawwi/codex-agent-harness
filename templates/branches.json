@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "project": "{{PROJECT_NAME}}",
+  "branches": [
+    {
+      "id": "main",
+      "title": "Main Delivery Branch",
+      "status": "active",
+      "created_at": "{{CREATED_AT}}",
+      "summary": "Primary execution line for milestone delivery.",
+      "current_milestone_id": "M1"
+    }
+  ]
+}

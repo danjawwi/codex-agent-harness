@@ -245,6 +245,7 @@ The default project runtime artifacts are:
 - `.codex-harness/observability/trace.ndjson`
 - `.codex-harness/checkpoints/checkpoints.json`
 - `.codex-harness/approvals/approvals.json`
+- `.codex-harness/branches/branches.json`
 - `.codex-harness/knowledge/knowledge-index.json`
 - `.codex-harness/evals/eval-suite.json`
 
@@ -260,6 +261,7 @@ This harness now includes first-pass versions of five additional operational lay
 - `checkpoint and replay`: explicit recovery points before risky transitions, repairs, or handoffs
 - `optional human approval`: a switchable gate for releases, destructive changes, or other approval-sensitive actions
 - `knowledge and retrieval`: reusable cross-project knowledge distinct from per-project memory
+- `live control plane`: a polling-based web interface for current progress, milestones, traces, branches, checkpoints, and approvals
 
 ## Repository Scope
 
@@ -368,6 +370,7 @@ Additional first-pass governance layers are available:
 - light eval tracking
 - optional human approvals
 - reusable knowledge capture
+- a live browser control plane
 
 Those mechanisms are documented in `mechanisms/` and referenced by both `AGENTS.md` and the
 installed harness skill.
@@ -393,6 +396,18 @@ To render a static HTML dashboard for the current harness state:
 
 ```bash
 python3 ~/.codex/skills/agent-governance-harness/scripts/render_progress_dashboard.py --root "$PWD"
+```
+
+To run the live local control plane:
+
+```bash
+python3 ~/.codex/skills/agent-governance-harness/scripts/serve_control_plane.py --root "$PWD" --port 8765
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8765
 ```
 
 ## Memory Strategy
@@ -444,9 +459,27 @@ The current display strategy is:
 
 - write structured events to `observability/trace.ndjson`
 - maintain checkpoints and approvals as structured JSON artifacts
+- maintain branch state in `branches/branches.json`
 - generate a static HTML dashboard that summarizes milestone state, task counts, logs, traces, checkpoints, approvals, knowledge items, and light eval status
+- provide a live browser control plane with milestone progress, task progress, trace timeline, checkpoint view, branch graph, and optional approval actions
 
 This is the first version of a human-readable progress surface for long-running Codex work.
+
+## Split-Screen Workflow
+
+The recommended operating model is:
+
+- use Codex as the primary execution client
+- keep voice or natural-language input inside Codex
+- open the harness control plane in a browser on another screen
+
+This creates a clean separation:
+
+- Codex is the execution surface
+- the browser page is the governance and review surface
+
+That split is intentional. It keeps the strongest input modality inside Codex while making the
+current state of long-running work visible in a dedicated control plane.
 
 ## Near-Term Evolution
 

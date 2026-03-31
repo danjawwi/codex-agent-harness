@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harness Control Plane</title>
+  <style>
+    :root {
+      --bg: #f5efe5;
+      --panel: rgba(255, 250, 243, 0.88);
+      --ink: #1b1713;
+      --muted: #655b4f;
+      --line: #d8c9b4;
+      --accent: #0f766e;
+      --warm: #b45309;
+      --danger: #b91c1c;
+      --shadow: 0 18px 50px rgba(53, 41, 24, 0.1);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      background:
+        radial-gradient(circle at top right, rgba(15,118,110,0.12), transparent 24%),
+        radial-gradient(circle at top left, rgba(180,83,9,0.08), transparent 22%),
+        linear-gradient(180deg, #fbf6ee 0%, var(--bg) 100%);
+    }
+    .wrap {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+    .hero, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      border-radius: 24px;
+    }
+    .hero {
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 34px;
+    }
+    .hero p {
+      margin: 0 0 10px;
+      color: var(--muted);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(15,118,110,0.1);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .panel {
+      padding: 18px;
+    }
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .stat {
+      padding: 14px;
+      border: 1px solid rgba(15,118,110,0.14);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.62);
+    }
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 28px;
+    }
+    .panel p, .panel li {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 1080px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+    .progress-list {
+      display: grid;
+      gap: 12px;
+    }
+    .progress-card {
+      border: 1px solid rgba(15,118,110,0.12);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(255,255,255,0.55);
+    }
+    .progress-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: baseline;
+      margin-bottom: 8px;
+    }
+    .progress-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(27,23,19,0.08);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0f766e, #0ea5a0);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+    .event {
+      padding-left: 14px;
+      border-left: 3px solid rgba(15,118,110,0.24);
+    }
+    .event strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .event small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(180,83,9,0.12);
+      color: var(--warm);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      background: #0f766e;
+      color: white;
+    }
+    button.secondary {
+      background: #b45309;
+    }
+    button.ghost {
+      background: rgba(27,23,19,0.08);
+      color: var(--ink);
+    }
+    button.danger {
+      background: #b91c1c;
+    }
+    .branch-svg {
+      width: 100%;
+      min-height: 260px;
+      border: 1px dashed rgba(27,23,19,0.14);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.45);
+    }
+    .empty {
+      color: var(--muted);
+      font-style: italic;
+    }
+    .footer {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .split-note {
+      color: var(--muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Harness Control Plane</h1>
+      <p>Use Codex as the execution client. Use this page as the governance surface for visibility, checkpoints, branches, and approvals.</p>
+      <div id="heroMeta" class="hero-meta"></div>
+      <p class="split-note">Recommended setup: Codex on one screen for voice input, control plane on the other screen for live progress review.</p>
+    </section>
+
+    <section class="panel" style="margin-bottom:16px;">
+      <h2>System Snapshot</h2>
+      <div id="stats" class="stats"></div>
+    </section>
+
+    <div class="two-col">
+      <section class="panel">
+        <h2>Milestone Progress</h2>
+        <div id="milestones" class="progress-list"></div>
+      </section>
+      <section class="panel">
+        <h2>Current Focus</h2>
+        <div id="focusText" class="empty">Loading...</div>
+      </section>
+    </div>
+
+    <div class="two-col">
+      <section class="panel">
+        <h2>Active Tasks</h2>
+        <div id="activeTasks"></div>
+      </section>
+      <section class="panel">
+        <h2>Recent Trace</h2>
+        <div id="traceTimeline" class="timeline"></div>
+      </section>
+    </div>
+
+    <div class="two-col">
+      <section class="panel">
+        <h2>Checkpoint Timeline</h2>
+        <div id="checkpoints"></div>
+      </section>
+      <section class="panel">
+        <h2>Branch Graph</h2>
+        <svg id="branchGraph" class="branch-svg" viewBox="0 0 960 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div id="branchActions" class="actions"></div>
+      </section>
+    </div>
+
+    <div class="two-col">
+      <section class="panel">
+        <h2>Approvals</h2>
+        <div id="approvals"></div>
+      </section>
+      <section class="panel">
+        <h2>Knowledge And Light Evals</h2>
+        <div id="knowledge"></div>
+        <div id="evals" style="margin-top:18px;"></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Recent Log</h2>
+      <div id="logItems"></div>
+      <p class="footer">Auto-refresh every __REFRESH_INTERVAL_MS__ ms.</p>
+    </section>
+  </div>
+
+  <script>
+    const refreshMs = __REFRESH_INTERVAL_MS__;
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function prettyText(text, maxLength = 420) {
+      const value = String(text || "").trim();
+      if (!value) return "No data yet.";
+      return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
+    }
+
+    async function loadState() {
+      const response = await fetch("/api/state");
+      return response.json();
+    }
+
+    async function postJson(path, payload) {
+      const response = await fetch(path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      return response.json();
+    }
+
+    function renderHero(state) {
+      const activeMilestone = state.active_milestone?.title || "No active milestone";
+      const activeBranch = state.active_branch?.title || "No active branch";
+      document.getElementById("heroMeta").innerHTML = `
+        <span class="badge">project: ${escapeHtml(state.project_name)}</span>
+        <span class="badge">milestone: ${escapeHtml(activeMilestone)}</span>
+        <span class="badge">branch: ${escapeHtml(activeBranch)}</span>
+        <span class="badge">approvals: ${state.approvals?.enabled ? "enabled" : "optional / off"}</span>
+      `;
+      document.getElementById("focusText").innerHTML = `<p>${escapeHtml(prettyText(state.current_md, 700))}</p>`;
+    }
+
+    function renderStats(state) {
+      const counts = state.task_counts || {};
+      const stats = [
+        ["Pending", counts.pending || 0],
+        ["Ready", counts.ready || 0],
+        ["In Progress", counts.in_progress || 0],
+        ["Blocked", counts.blocked || 0],
+        ["Done", counts.done || 0]
+      ];
+      document.getElementById("stats").innerHTML = stats.map(([label, value]) => `
+        <div class="stat">
+          <span>${escapeHtml(label)}</span>
+          <strong>${escapeHtml(value)}</strong>
+        </div>
+      `).join("");
+    }
+
+    function renderMilestones(state) {
+      const milestones = state.milestones || [];
+      const container = document.getElementById("milestones");
+      if (!milestones.length) {
+        container.innerHTML = `<p class="empty">No milestones yet.</p>`;
+        return;
+      }
+      container.innerHTML = milestones.map(item => `
+        <div class="progress-card">
+          <div class="progress-head">
+            <strong>${escapeHtml(item.id)} · ${escapeHtml(item.title)}</strong>
+            <span class="pill">${escapeHtml(item.status)}</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${item.percent}%"></div></div>
+          <p>${escapeHtml(item.delivery_target || item.goal || "No delivery target yet.")}</p>
+          <small>${item.done_tasks}/${item.total_tasks} tasks done · ${item.in_progress_tasks} active · ${item.blocked_tasks} blocked</small>
+        </div>
+      `).join("");
+    }
+
+    function renderTable(containerId, headers, rows, emptyText) {
+      const container = document.getElementById(containerId);
+      if (!rows.length) {
+        container.innerHTML = `<p class="empty">${escapeHtml(emptyText)}</p>`;
+        return;
+      }
+      const head = headers.map(h => `<th>${escapeHtml(h)}</th>`).join("");
+      const body = rows.map(row => `<tr>${row.map(col => `<td>${escapeHtml(col)}</td>`).join("")}</tr>`).join("");
+      container.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
+    }
+
+    function renderActiveTasks(state) {
+      const rows = (state.active_tasks || []).map(task => [
+        task.id || "",
+        task.title || "",
+        task.status || "",
+        task.assigned_executor || task.owner_role || "",
+        task.milestone_id || ""
+      ]);
+      renderTable("activeTasks", ["Task", "Title", "Status", "Owner", "Milestone"], rows, "No active tasks right now.");
+    }
+
+    function renderTrace(state) {
+      const events = (state.trace_events || []).slice(-12).reverse();
+      const container = document.getElementById("traceTimeline");
+      if (!events.length) {
+        container.innerHTML = `<p class="empty">No trace events yet.</p>`;
+        return;
+      }
+      container.innerHTML = events.map(event => `
+        <div class="event">
+          <strong>${escapeHtml(event.event_type || "event")} · ${escapeHtml(event.summary || "")}</strong>
+          <small>${escapeHtml(event.timestamp || "")} · ${escapeHtml(event.phase || "")} · ${escapeHtml(event.role || "")}</small>
+        </div>
+      `).join("");
+    }
+
+    function renderCheckpoints(state) {
+      const rows = (state.checkpoints || []).map(item => [
+        item.id || "",
+        item.created_at || "",
+        item.trigger || "",
+        item.summary || "",
+        item.restore_hint || ""
+      ]);
+      renderTable("checkpoints", ["ID", "Created", "Trigger", "Summary", "Restore Hint"], rows, "No checkpoints recorded yet.");
+    }
+
+    function renderApprovals(state) {
+      const approvals = state.approvals || { enabled: false, gates: [] };
+      const container = document.getElementById("approvals");
+      if (!approvals.enabled) {
+        container.innerHTML = `<p class="empty">Approvals are disabled by default. Enable them only for higher-risk operations.</p>`;
+        return;
+      }
+      if (!(approvals.gates || []).length) {
+        container.innerHTML = `<p class="empty">No approval gates recorded yet.</p>`;
+        return;
+      }
+      container.innerHTML = approvals.gates.map(gate => {
+        const pending = gate.status === "pending";
+        return `
+          <div class="progress-card">
+            <div class="progress-head">
+              <strong>${escapeHtml(gate.id)} · ${escapeHtml(gate.action_type || "approval")}</strong>
+              <span class="pill">${escapeHtml(gate.status)}</span>
+            </div>
+            <p>${escapeHtml(gate.summary || "")}</p>
+            <small>${escapeHtml(gate.decision_summary || "")}</small>
+            ${pending ? `
+              <div class="actions">
+                <button onclick="approveGate('${escapeHtml(gate.id)}', 'approved')">Approve</button>
+                <button class="secondary" onclick="approveGate('${escapeHtml(gate.id)}', 'changes_requested')">Request Changes</button>
+                <button class="danger" onclick="approveGate('${escapeHtml(gate.id)}', 'rejected')">Reject</button>
+              </div>` : ""}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderKnowledgeAndEvals(state) {
+      const knowledge = state.knowledge_items || [];
+      const evals = state.eval_cases || [];
+      document.getElementById("knowledge").innerHTML = knowledge.length
+        ? `<table><thead><tr><th>Kind</th><th>Title</th><th>Summary</th></tr></thead><tbody>${knowledge.map(item => `<tr><td>${escapeHtml(item.kind || "")}</td><td>${escapeHtml(item.title || "")}</td><td>${escapeHtml(item.summary || "")}</td></tr>`).join("")}</tbody></table>`
+        : `<p class="empty">No reusable knowledge captured yet.</p>`;
+      document.getElementById("evals").innerHTML = evals.length
+        ? `<table><thead><tr><th>Status</th><th>Title</th><th>Goal</th></tr></thead><tbody>${evals.map(item => `<tr><td>${escapeHtml(item.status || "")}</td><td>${escapeHtml(item.title || "")}</td><td>${escapeHtml(item.goal || "")}</td></tr>`).join("")}</tbody></table>`
+        : `<p class="empty">No light evals defined yet.</p>`;
+    }
+
+    function renderLog(state) {
+      const items = state.log_bullets || [];
+      const container = document.getElementById("logItems");
+      if (!items.length) {
+        container.innerHTML = `<p class="empty">No log bullets yet.</p>`;
+        return;
+      }
+      container.innerHTML = `<ul>${items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    }
+
+    function renderBranchGraph(state) {
+      const branches = state.branches || [];
+      const svg = document.getElementById("branchGraph");
+      const actions = document.getElementById("branchActions");
+      if (!branches.length) {
+        svg.innerHTML = "";
+        actions.innerHTML = `<p class="empty">No branch data yet.</p>`;
+        return;
+      }
+
+      const branchMap = new Map(branches.map(branch => [branch.id, branch]));
+      const depthCache = new Map();
+      const depthOf = (branch) => {
+        if (depthCache.has(branch.id)) return depthCache.get(branch.id);
+        const parentId = branch.parent_branch_id;
+        const depth = parentId && branchMap.has(parentId) ? depthOf(branchMap.get(parentId)) + 1 : 0;
+        depthCache.set(branch.id, depth);
+        return depth;
+      };
+
+      const nodes = branches.map((branch, index) => ({
+        ...branch,
+        depth: depthOf(branch),
+        x: 120 + depthOf(branch) * 250,
+        y: 70 + index * 96
+      }));
+
+      const width = Math.max(960, ...nodes.map(node => node.x + 220));
+      const height = Math.max(320, ...nodes.map(node => node.y + 90));
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+      const lines = nodes.map(node => {
+        if (!node.parent_branch_id || !branchMap.has(node.parent_branch_id)) return "";
+        const parent = nodes.find(item => item.id === node.parent_branch_id);
+        if (!parent) return "";
+        return `<line x1="${parent.x + 180}" y1="${parent.y + 24}" x2="${node.x}" y2="${node.y + 24}" stroke="rgba(15,118,110,0.45)" stroke-width="3" stroke-linecap="round" />`;
+      }).join("");
+
+      const boxes = nodes.map(node => {
+        const fill = node.status === "active" ? "rgba(15,118,110,0.14)" : node.status === "completed" ? "rgba(15,118,110,0.08)" : "rgba(27,23,19,0.06)";
+        const stroke = node.status === "active" ? "#0f766e" : node.status === "abandoned" ? "#b91c1c" : "#8b7e6d";
+        return `
+          <g>
+            <rect x="${node.x}" y="${node.y}" width="188" height="58" rx="18" fill="${fill}" stroke="${stroke}" stroke-width="2"></rect>
+            <text x="${node.x + 14}" y="${node.y + 22}" font-size="13" font-weight="700" fill="#1b1713">${escapeHtml(node.title || node.id)}</text>
+            <text x="${node.x + 14}" y="${node.y + 40}" font-size="11" fill="#655b4f">${escapeHtml(node.status)} · ${escapeHtml(node.current_milestone_id || "")}</text>
+            <text x="${node.x + 14}" y="${node.y + 54}" font-size="10" fill="#655b4f">${escapeHtml(node.parent_checkpoint_id || "")}</text>
+          </g>
+        `;
+      }).join("");
+
+      svg.innerHTML = lines + boxes;
+      actions.innerHTML = branches.map(branch => branch.status === "active"
+        ? `<span class="badge">active: ${escapeHtml(branch.id)}</span>`
+        : `<button class="ghost" onclick="activateBranch('${escapeHtml(branch.id)}')">Activate ${escapeHtml(branch.id)}</button>`
+      ).join("");
+    }
+
+    async function approveGate(id, status) {
+      const note = window.prompt(`Decision note for ${id}:`, "");
+      await postJson("/api/approval", {
+        id,
+        status,
+        decision_summary: note || "",
+        decision_by: "control_plane"
+      });
+      await refresh();
+    }
+
+    async function activateBranch(id) {
+      await postJson("/api/branch/activate", { id });
+      await refresh();
+    }
+
+    async function refresh() {
+      try {
+        const state = await loadState();
+        renderHero(state);
+        renderStats(state);
+        renderMilestones(state);
+        renderActiveTasks(state);
+        renderTrace(state);
+        renderCheckpoints(state);
+        renderApprovals(state);
+        renderKnowledgeAndEvals(state);
+        renderLog(state);
+        renderBranchGraph(state);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    refresh();
+    setInterval(refresh, refreshMs);
+  </script>
+</body>
+</html>

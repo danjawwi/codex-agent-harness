@@ -50,6 +50,9 @@
         "task_id": {
           "type": "string"
         },
+        "branch_id": {
+          "type": "string"
+        },
         "trigger": {
           "type": "string",
           "minLength": 1
