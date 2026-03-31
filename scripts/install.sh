@@ -10,6 +10,7 @@ cp "$REPO_ROOT/AGENTS.md" "$CODEX_HOME/AGENTS.md"
 rm -rf "$CODEX_HOME/skills/agent-governance-harness"
 cp -R "$REPO_ROOT/skills/agent-governance-harness" "$CODEX_HOME/skills/agent-governance-harness"
 cp "$REPO_ROOT/scripts/sync-harness-memory.sh" "$CODEX_HOME/skills/agent-governance-harness/scripts/sync_harness_memory.sh"
+cp "$REPO_ROOT/skills/agent-governance-harness/scripts/render_progress_dashboard.py" "$CODEX_HOME/skills/agent-governance-harness/scripts/render_progress_dashboard.py"
 mkdir -p "$CODEX_HOME/skills/agent-governance-harness/references"
 rm -rf "$CODEX_HOME/skills/agent-governance-harness/references/mechanisms"
 rm -rf "$CODEX_HOME/skills/agent-governance-harness/references/orchestration"
@@ -24,8 +25,10 @@ cp -R "$REPO_ROOT/templates" "$CODEX_HOME/skills/agent-governance-harness/refere
 
 chmod +x "$CODEX_HOME/skills/agent-governance-harness/scripts/init_harness.py"
 chmod +x "$CODEX_HOME/skills/agent-governance-harness/scripts/sync_harness_memory.sh"
+chmod +x "$CODEX_HOME/skills/agent-governance-harness/scripts/render_progress_dashboard.py"
 chmod +x "$REPO_ROOT/scripts/sync-harness-memory.sh"
 chmod +x "$REPO_ROOT/skills/agent-governance-harness/scripts/sync_harness_memory.sh"
+chmod +x "$REPO_ROOT/skills/agent-governance-harness/scripts/render_progress_dashboard.py"
 
 echo "Installed harness into $CODEX_HOME"
 echo "Installed governance references into $CODEX_HOME/skills/agent-governance-harness/references"

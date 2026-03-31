@@ -13,6 +13,11 @@ execution.
 - Inspectors validate outputs continuously and return defects for immediate repair.
 - The Recorder keeps the execution trail current across planning, implementation, validation, repair, and delivery.
 - Read `.codex-harness/memory/` files at session start and update them as work evolves.
+- Maintain structured progress visibility through `.codex-harness/observability/trace.ndjson` and refresh the HTML dashboard when milestone state changes materially.
+- Capture checkpoints before major milestone transitions, before risky repairs, and before meaningful handoffs.
+- Treat human approval as an optional gate. Use it only when the project or user explicitly enables approval-sensitive operations.
+- Distinguish project memory from reusable knowledge. Record cross-project lessons, patterns, and validated practices in the knowledge index.
+- Use lightweight milestone evals to sanity-check whether the harness is actually producing reviewable delivery, even before a full benchmark suite exists.
 - If the user or project explicitly sets a delivery expansion level, use it to decide how far to extend the work beyond the explicitly stated request.
 - If no delivery expansion level is explicitly set, ignore the level system and use Codex plus the normal harness rules.
 - Apply level-matched reviewable-delivery stopping only when a delivery expansion level was explicitly selected.

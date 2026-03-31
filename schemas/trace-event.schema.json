@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/trace-event.schema.json",
+  "title": "Harness Trace Event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "timestamp",
+    "phase",
+    "role",
+    "event_type",
+    "summary"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "intake",
+        "structuring",
+        "dispatch",
+        "execution",
+        "inspection",
+        "repair",
+        "integration",
+        "reporting",
+        "system"
+      ]
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "project_manager",
+        "requirements_manager",
+        "executor",
+        "inspector",
+        "recorder",
+        "system"
+      ]
+    },
+    "event_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "milestone_id": {
+      "type": "string"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "details": {
+      "type": "string"
+    }
+  }
+}

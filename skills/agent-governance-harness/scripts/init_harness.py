@@ -48,6 +48,18 @@ def main() -> int:
     harness_dir.mkdir(parents=True, exist_ok=True)
     memory_dir = harness_dir / "memory"
     memory_dir.mkdir(parents=True, exist_ok=True)
+    observability_dir = harness_dir / "observability"
+    observability_dir.mkdir(parents=True, exist_ok=True)
+    checkpoints_dir = harness_dir / "checkpoints"
+    checkpoints_dir.mkdir(parents=True, exist_ok=True)
+    approvals_dir = harness_dir / "approvals"
+    approvals_dir.mkdir(parents=True, exist_ok=True)
+    knowledge_dir = harness_dir / "knowledge"
+    knowledge_dir.mkdir(parents=True, exist_ok=True)
+    evals_dir = harness_dir / "evals"
+    evals_dir.mkdir(parents=True, exist_ok=True)
+    dashboard_dir = harness_dir / "dashboard"
+    dashboard_dir.mkdir(parents=True, exist_ok=True)
     references_dir = resolve_templates_dir()
 
     created_at = utc_now()
@@ -69,6 +81,11 @@ def main() -> int:
     handoff = render_template(references_dir / "handoff.md", replacements)
     project_summary = render_template(references_dir / "project-summary.md", replacements)
     observations = render_template(references_dir / "observations.ndjson", replacements)
+    trace = render_template(references_dir / "trace.ndjson", replacements)
+    checkpoints = render_template(references_dir / "checkpoints.json", replacements)
+    approvals = render_template(references_dir / "approvals.json", replacements)
+    knowledge_index = render_template(references_dir / "knowledge-index.json", replacements)
+    eval_suite = render_template(references_dir / "eval-suite.json", replacements)
 
     write_if_missing(harness_dir / "project.md", project_md, args.force)
     write_if_missing(harness_dir / "backlog.json", backlog_json, args.force)
@@ -80,6 +97,11 @@ def main() -> int:
     write_if_missing(memory_dir / "handoff.md", handoff, args.force)
     write_if_missing(memory_dir / "project-summary.md", project_summary, args.force)
     write_if_missing(memory_dir / "observations.ndjson", observations, args.force)
+    write_if_missing(observability_dir / "trace.ndjson", trace, args.force)
+    write_if_missing(checkpoints_dir / "checkpoints.json", checkpoints, args.force)
+    write_if_missing(approvals_dir / "approvals.json", approvals, args.force)
+    write_if_missing(knowledge_dir / "knowledge-index.json", knowledge_index, args.force)
+    write_if_missing(evals_dir / "eval-suite.json", eval_suite, args.force)
 
     print(f"Initialized harness at {harness_dir}")
     return 0

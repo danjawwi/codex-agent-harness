@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "project": "{{PROJECT_NAME}}",
+  "mode": "light",
+  "cases": [
+    {
+      "id": "E1",
+      "title": "Reviewable milestone delivery",
+      "goal": "Check whether the current milestone produced a concrete reviewable deliverable.",
+      "status": "pending",
+      "pass_criteria": [
+        "The milestone has a clear review artifact.",
+        "Inspection evidence exists for the main slice.",
+        "A human can understand what to review next."
+      ],
+      "notes": "Replace with project-specific light evals as the harness matures."
+    }
+  ]
+}

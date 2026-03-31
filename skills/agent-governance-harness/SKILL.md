@@ -41,8 +41,18 @@ Open these only when needed:
 - `references/mechanisms/`: default harness mechanisms inspired by search-first execution, PUA-style persistence, and persistent memory systems
 - `references/orchestration/`: lifecycle, dispatch, and state-transition runbooks
 - `references/orchestration/ambiguity-and-expansion.md`: optional expansion-level behavior for under-specified requests
+- `references/orchestration/observability-and-trace.md`: trace, dashboard, and progress-visibility rules
+- `references/orchestration/checkpoints-and-replay.md`: checkpoint capture, replay, and handoff safety rules
+- `references/orchestration/human-approval.md`: optional approval gates for higher-risk actions
+- `references/orchestration/knowledge-operations.md`: reusable knowledge capture distinct from per-project memory
+- `references/orchestration/light-eval.md`: first-pass milestone eval practice
 - `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
+- `references/schemas/trace-event.schema.json`: structured trace event contract
+- `references/schemas/checkpoint-index.schema.json`: checkpoint index contract
+- `references/schemas/approval-gates.schema.json`: optional approval gate contract
+- `references/schemas/knowledge-index.schema.json`: reusable knowledge index contract
+- `references/schemas/eval-suite.schema.json`: lightweight evaluation suite contract
 - `references/schemas/task.schema.json`: task contract for bounded executor work
 - `references/schemas/log-entry.schema.json`: structured logging contract
 - `references/schemas/memory-observation.schema.json`: observation memory record contract
@@ -66,6 +76,11 @@ Default files:
 - `current.md`: active milestone, active tasks, planned verification, and integration notes
 - `log.md`: append-only record of execution, inspection, repairs, blockers, and milestone outcomes
 - `memory/`: active context, observations, decision log, handoff, and project summary
+- `observability/trace.ndjson`: structured execution trace
+- `checkpoints/checkpoints.json`: resumable checkpoint records
+- `approvals/approvals.json`: optional approval-gate records
+- `knowledge/knowledge-index.json`: reusable cross-project knowledge records
+- `evals/eval-suite.json`: lightweight milestone eval cases
 
 To synchronize `.codex-harness/` through GitHub when needed:
 
@@ -133,6 +148,9 @@ Those levels should complete their delivery target before stopping.
 - Record progress, defects, repairs, and milestone outcomes as they happen.
 - Keep the project resumable after compaction, interruption, or thread changes.
 - Preserve enough detail for audit and replay, but keep logs concise and structured.
+- Keep the trace stream current enough to regenerate the dashboard without hand-editing.
+- Record checkpoints before risky transitions and major handoffs.
+- Promote durable lessons into the knowledge index when they are useful beyond the current project.
 
 ## Reporting Cadence
 
@@ -147,6 +165,12 @@ Those levels should complete their delivery target before stopping.
 - Prefer Git-backed project memory over hidden chat-only state.
 - For team collaboration, commit `.codex-harness/` memory files so GitHub becomes the shared remote memory layer.
 - Use `handoff.md` and `observations.ndjson` as the minimum shared continuity surface for multi-person collaboration.
+
+## Optional Approval Practice
+
+- Approval is not required by default.
+- Use approval gates only when the user or project explicitly enables them.
+- Good approval candidates include destructive actions, releases, irreversible migrations, or expensive external side effects.
 
 ## Small-Task Shortcut
 

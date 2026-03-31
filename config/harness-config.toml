@@ -25,3 +25,26 @@ delivery_stop_rule = "codex_default_unless_level_explicit"
 wall_clock_limit_minutes = 120
 token_limit = 800000
 parallel_limit = 6
+
+[observability]
+enabled = true
+trace_file = ".codex-harness/observability/trace.ndjson"
+dashboard_output = ".codex-harness/dashboard/index.html"
+
+[checkpointing]
+enabled = true
+file = ".codex-harness/checkpoints/checkpoints.json"
+
+[approvals]
+enabled = false
+mode = "optional"
+file = ".codex-harness/approvals/approvals.json"
+
+[knowledge]
+enabled = true
+file = ".codex-harness/knowledge/knowledge-index.json"
+
+[evals]
+enabled = true
+mode = "light"
+file = ".codex-harness/evals/eval-suite.json"

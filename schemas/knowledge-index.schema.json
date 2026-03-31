@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/danjawwi/codex-agent-harness/schemas/knowledge-index.schema.json",
+  "title": "Harness Knowledge Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "project",
+    "last_updated_at",
+    "items"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "project": {
+      "type": "string",
+      "minLength": 1
+    },
+    "last_updated_at": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    }
+  },
+  "$defs": {
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "summary",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "pattern",
+            "warning",
+            "workaround",
+            "checklist",
+            "decision",
+            "postmortem"
+          ]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "applicability_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "last_validated_at": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

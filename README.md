@@ -242,9 +242,24 @@ The default project runtime artifacts are:
 - `.codex-harness/backlog.json`
 - `.codex-harness/current.md`
 - `.codex-harness/log.md`
+- `.codex-harness/observability/trace.ndjson`
+- `.codex-harness/checkpoints/checkpoints.json`
+- `.codex-harness/approvals/approvals.json`
+- `.codex-harness/knowledge/knowledge-index.json`
+- `.codex-harness/evals/eval-suite.json`
 
 These files make the project resumable and reviewable across compaction, session changes, and long
 delivery timelines.
+
+## New Operational Layers
+
+This harness now includes first-pass versions of five additional operational layers:
+
+- `light evals`: a small, practical evaluation layer for milestone quality before a full benchmark program exists
+- `observability and trace`: structured run traces plus a static HTML dashboard for human review
+- `checkpoint and replay`: explicit recovery points before risky transitions, repairs, or handoffs
+- `optional human approval`: a switchable gate for releases, destructive changes, or other approval-sensitive actions
+- `knowledge and retrieval`: reusable cross-project knowledge distinct from per-project memory
 
 ## Repository Scope
 
@@ -346,6 +361,14 @@ When the harness is active, it should automatically apply:
 - high-agency execution and verification discipline
 - Git-backed project memory
 
+Additional first-pass governance layers are available:
+
+- trace and dashboard generation
+- checkpoint capture
+- light eval tracking
+- optional human approvals
+- reusable knowledge capture
+
 Those mechanisms are documented in `mechanisms/` and referenced by both `AGENTS.md` and the
 installed harness skill.
 
@@ -364,6 +387,12 @@ To synchronize project memory through GitHub from any harness-managed repo:
 
 ```bash
 bash ~/.codex/skills/agent-governance-harness/scripts/sync_harness_memory.sh "$PWD"
+```
+
+To render a static HTML dashboard for the current harness state:
+
+```bash
+python3 ~/.codex/skills/agent-governance-harness/scripts/render_progress_dashboard.py --root "$PWD"
 ```
 
 ## Memory Strategy
@@ -406,6 +435,18 @@ The current team model is simple on purpose:
 
 This gives us a practical multi-person workflow now, without waiting for a hidden platform memory
 system to mature.
+
+## Progress Visibility
+
+The harness now treats progress visibility as a first-class requirement, not just an internal log.
+
+The current display strategy is:
+
+- write structured events to `observability/trace.ndjson`
+- maintain checkpoints and approvals as structured JSON artifacts
+- generate a static HTML dashboard that summarizes milestone state, task counts, logs, traces, checkpoints, approvals, knowledge items, and light eval status
+
+This is the first version of a human-readable progress surface for long-running Codex work.
 
 ## Near-Term Evolution
 
