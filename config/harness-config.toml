@@ -16,3 +16,12 @@ directory = ".codex-harness/memory"
 sync_transport = "git"
 remote_store = "github"
 team_mode = "shared-repo"
+
+[delivery]
+expansion_level_mode = "explicit_only"
+delivery_stop_rule = "codex_default_unless_level_explicit"
+
+[level_10_budget]
+wall_clock_limit_minutes = 120
+token_limit = 800000
+parallel_limit = 6

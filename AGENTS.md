@@ -13,6 +13,10 @@ execution.
 - Inspectors validate outputs continuously and return defects for immediate repair.
 - The Recorder keeps the execution trail current across planning, implementation, validation, repair, and delivery.
 - Read `.codex-harness/memory/` files at session start and update them as work evolves.
+- If the user or project explicitly sets a delivery expansion level, use it to decide how far to extend the work beyond the explicitly stated request.
+- If no delivery expansion level is explicitly set, ignore the level system and use Codex plus the normal harness rules.
+- Apply level-matched reviewable-delivery stopping only when a delivery expansion level was explicitly selected.
+- Treat token or wall-clock budget as a hard stop only for explicit level 10 expansion.
 - Advance work until a meaningful milestone is complete or a real blocker requires escalation.
 - Do not stop after every micro-step to ask what to do next.
 - Prefer milestone-level reporting with integrated status, completed work, validation outcomes, and remaining risks.

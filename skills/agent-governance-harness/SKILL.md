@@ -40,6 +40,7 @@ Open these only when needed:
 
 - `references/mechanisms/`: default harness mechanisms inspired by search-first execution, PUA-style persistence, and persistent memory systems
 - `references/orchestration/`: lifecycle, dispatch, and state-transition runbooks
+- `references/orchestration/ambiguity-and-expansion.md`: optional expansion-level behavior for under-specified requests
 - `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
 - `references/schemas/task.schema.json`: task contract for bounded executor work
@@ -99,6 +100,19 @@ Default cycle:
 7. Record all task transitions and validation outcomes in `log.md`.
 8. Continue until the milestone is complete or a real blocker requires escalation.
 9. Report back with an integrated milestone update.
+
+## Ambiguity And Expansion
+
+Use the expansion-level system only when the user or project explicitly sets a delivery expansion level.
+
+Core rule:
+
+- if no level is explicitly set, use normal Codex and harness behavior
+- explicit levels `1-9` stop when the level-matched deliverable becomes reviewable
+- explicit level `10` keeps extending within the configured hard budget
+
+This means token or time budget should not be the primary stop rule for explicit levels `1-9`.
+Those levels should complete their delivery target before stopping.
 
 ## Parallel And Sequential Work
 

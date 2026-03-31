@@ -15,11 +15,13 @@
       "title": "Define first delivery milestone",
       "goal": "Replace this with the first integrated delivery objective.",
       "status": "ready",
+      "delivery_target": "Replace this with the reviewable deliverable that justifies milestone closure.",
+      "review_artifact": "Replace this with the artifact, screen, document, branch state, or behavior the user can review.",
       "depends_on": [],
       "acceptance_checks": [
         "Milestone goal is clear and user-meaningful."
       ],
-      "notes": "Edit this milestone before dispatching work."
+      "notes": "Add expansion_level only if the user or project explicitly chose a work-range level."
     }
   ],
   "features": []

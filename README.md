@@ -198,6 +198,39 @@ We do want:
 
 This means the harness should optimize for sustained momentum, not conversational checkpointing.
 
+## Incomplete Requirements And Reviewable Delivery
+
+Users often cannot fully describe what they want until they can react to something concrete.
+
+That means the harness should not treat the prompt as the complete specification.
+When the request is incomplete, the harness should extend the work using:
+
+- direct repository evidence
+- common practice
+- internal consistency with the stated goal
+- the minimum additional horizontal and vertical detail needed to produce something reviewable
+
+The operational question is not only "what did the user explicitly ask for?"
+It is also "what needs to be filled in so the user can review a meaningful result?"
+
+To govern that behavior, the harness uses a delivery expansion scale from `1` to `10`.
+
+- `1`: do only the explicitly requested work
+- `2`: add direct prerequisites needed to complete that explicit work
+- `3`: reach the minimum runnable or usable closed loop for the current task
+- `4`: reach the minimum reviewable slice for the current feature
+- `5`: deliver a common-practice complete slice for the current feature
+- `6`: extend into adjacent support work that is normally expected in practice
+- `7`: connect adjacent workflow steps so the result feels operationally coherent
+- `8`: deepen the slice with integration, edge handling, and handoff quality
+- `9`: push toward a strong proactive draft of the broader implied solution
+- `10`: maximize useful extension within a hard runtime budget
+
+This scale is optional.
+If the user does not specify a work-range level, and the project does not explicitly set one, the
+harness should behave normally under Codex and the standard harness rules as if the scale was not in
+play.
+
 ## Artifact-Backed Governance
 
 This repository starts from a file-backed operating model because chat memory is not enough for
@@ -258,6 +291,31 @@ inherit from.
 - `config/harness-config.toml`: optional Codex config values for long-context work
 - `mechanisms/`: always-on execution and memory mechanisms
 - `orchestration/`: project lifecycle, dispatch logic, and state-transition rules
+
+## Delivery Stop Policy
+
+The stop condition should follow the expansion level only when such a level was explicitly chosen.
+
+If no level was chosen, use the normal Codex plus harness stop logic.
+
+Levels `1-9` should not primarily stop because of token or time budget when they were explicitly selected.
+They should stop when the level-matched deliverable is actually ready for review.
+
+That means:
+
+- level `1` stops when the explicit requested artifact is complete
+- level `3` stops when the current task has a minimal working closed loop
+- level `5` stops when the current feature slice is complete enough to reflect common practice
+- level `8` stops when the slice is integrated, reviewed, and ready for a serious handoff
+
+Only explicit level `10` should use token or wall-clock budget as a hard outer boundary.
+At that level, the harness should keep expanding until either:
+
+- the strongest available reviewable delivery has been assembled, or
+- the configured runtime budget is exhausted
+
+If the level `10` budget ends first, the harness should package the best integrated result reached
+so far and make the remaining obvious extensions explicit.
 - `roles/`: role contracts for planning, execution, inspection, and recording
 - `schemas/`: task, backlog, log, inspection, repair, and memory schemas
 - `templates/`: starter artifacts for runtime, memory, inspection, repair, and milestone reporting
