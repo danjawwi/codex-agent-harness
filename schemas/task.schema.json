@@ -49,6 +49,9 @@
     "milestone_id": {
       "type": "string"
     },
+    "slice_id": {
+      "type": "string"
+    },
     "depends_on": {
       "type": "array",
       "items": {

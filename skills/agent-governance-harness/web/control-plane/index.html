@@ -7,7 +7,7 @@
   <style>
     :root {
       --bg: #f5efe5;
-      --panel: rgba(255, 250, 243, 0.88);
+      --panel: rgba(255, 250, 243, 0.9);
       --ink: #1b1713;
       --muted: #655b4f;
       --line: #d8c9b4;
@@ -27,7 +27,7 @@
         linear-gradient(180deg, #fbf6ee 0%, var(--bg) 100%);
     }
     .wrap {
-      max-width: 1440px;
+      max-width: 1480px;
       margin: 0 auto;
       padding: 24px 18px 48px;
     }
@@ -49,28 +49,28 @@
       margin: 0 0 10px;
       color: var(--muted);
     }
-    .hero-meta {
+    .hero-meta, .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 12px;
     }
-    .badge {
+    .badge, .pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 6px 12px;
       border-radius: 999px;
-      background: rgba(15,118,110,0.1);
-      color: var(--accent);
       font-weight: 700;
       font-size: 12px;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-bottom: 16px;
+    .badge {
+      background: rgba(15,118,110,0.1);
+      color: var(--accent);
+    }
+    .pill {
+      background: rgba(180,83,9,0.12);
+      color: var(--warm);
     }
     .panel {
       padding: 18px;
@@ -79,30 +79,16 @@
       margin: 0 0 12px;
       font-size: 20px;
     }
-    .stats {
+    .stats, .grid, .stack, .progress-list, .timeline, .forms {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 12px;
     }
-    .stat {
-      padding: 14px;
-      border: 1px solid rgba(15,118,110,0.14);
-      border-radius: 18px;
-      background: rgba(255,255,255,0.62);
+    .stats {
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     }
-    .stat span {
-      display: block;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .stat strong {
-      display: block;
-      margin-top: 6px;
-      font-size: 28px;
-    }
-    .panel p, .panel li {
-      color: var(--muted);
-      line-height: 1.45;
+    .grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      margin-bottom: 16px;
     }
     .two-col {
       display: grid;
@@ -115,15 +101,23 @@
         grid-template-columns: 1fr;
       }
     }
-    .progress-list {
-      display: grid;
-      gap: 12px;
-    }
-    .progress-card {
-      border: 1px solid rgba(15,118,110,0.12);
-      border-radius: 18px;
+    .stat, .progress-card, .form-card {
       padding: 14px;
-      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(15,118,110,0.14);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.62);
+    }
+    .stat span, .muted, small {
+      color: var(--muted);
+    }
+    .stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 28px;
+    }
+    .panel p, .panel li {
+      color: var(--muted);
+      line-height: 1.45;
     }
     .progress-head {
       display: flex;
@@ -160,10 +154,6 @@
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
-    .timeline {
-      display: grid;
-      gap: 12px;
-    }
     .event {
       padding-left: 14px;
       border-left: 3px solid rgba(15,118,110,0.24);
@@ -172,25 +162,26 @@
       display: block;
       font-size: 14px;
       margin-bottom: 4px;
+      color: var(--ink);
     }
-    .event small {
-      color: var(--muted);
-      font-size: 12px;
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font: inherit;
+      background: rgba(255,255,255,0.75);
+      color: var(--ink);
     }
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(180,83,9,0.12);
-      color: var(--warm);
-      font-size: 12px;
-      font-weight: 700;
+    textarea {
+      min-height: 84px;
+      resize: vertical;
     }
-    .actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 10px;
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
     }
     button {
       border: 0;
@@ -214,7 +205,7 @@
     }
     .branch-svg {
       width: 100%;
-      min-height: 260px;
+      min-height: 320px;
       border: 1px dashed rgba(27,23,19,0.14);
       border-radius: 18px;
       background: rgba(255,255,255,0.45);
@@ -223,12 +214,7 @@
       color: var(--muted);
       font-style: italic;
     }
-    .footer {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .split-note {
+    .footer, .split-note {
       color: var(--muted);
       font-size: 13px;
     }
@@ -238,9 +224,9 @@
   <div class="wrap">
     <section class="hero">
       <h1>Harness Control Plane</h1>
-      <p>Use Codex as the execution client. Use this page as the governance surface for visibility, checkpoints, branches, and approvals.</p>
+      <p>Use Codex as the execution client. Use this page as the governance surface for live progress, risk, checkpoints, branches, and approvals.</p>
       <div id="heroMeta" class="hero-meta"></div>
-      <p class="split-note">Recommended setup: Codex on one screen for voice input, control plane on the other screen for live progress review.</p>
+      <p class="split-note">Recommended setup: Codex on one screen for voice input, control plane on the other screen for live governance review.</p>
     </section>
 
     <section class="panel" style="margin-bottom:16px;">
@@ -261,6 +247,17 @@
 
     <div class="two-col">
       <section class="panel">
+        <h2>Slice Progress</h2>
+        <div id="slices" class="progress-list"></div>
+      </section>
+      <section class="panel">
+        <h2>Risk Zone</h2>
+        <div id="risks" class="stack"></div>
+      </section>
+    </div>
+
+    <div class="two-col">
+      <section class="panel">
         <h2>Active Tasks</h2>
         <div id="activeTasks"></div>
       </section>
@@ -273,11 +270,24 @@
     <div class="two-col">
       <section class="panel">
         <h2>Checkpoint Timeline</h2>
-        <div id="checkpoints"></div>
+        <div id="checkpoints" class="timeline"></div>
+        <div class="form-card" style="margin-top:14px;">
+          <h2 style="font-size:18px;">Create Checkpoint</h2>
+          <div class="form-grid">
+            <input id="checkpointSummary" placeholder="Checkpoint summary">
+            <input id="checkpointTrigger" placeholder="Trigger" value="manual_control_plane">
+            <input id="checkpointMilestone" placeholder="Milestone ID">
+            <input id="checkpointTask" placeholder="Task ID">
+          </div>
+          <textarea id="checkpointRestoreHint" placeholder="Restore hint"></textarea>
+          <div class="actions">
+            <button onclick="createCheckpoint()">Create Checkpoint</button>
+          </div>
+        </div>
       </section>
       <section class="panel">
         <h2>Branch Graph</h2>
-        <svg id="branchGraph" class="branch-svg" viewBox="0 0 960 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg id="branchGraph" class="branch-svg" viewBox="0 0 960 360" preserveAspectRatio="xMidYMid meet"></svg>
         <div id="branchActions" class="actions"></div>
       </section>
     </div>
@@ -285,7 +295,19 @@
     <div class="two-col">
       <section class="panel">
         <h2>Approvals</h2>
-        <div id="approvals"></div>
+        <div id="approvals" class="stack"></div>
+        <div class="form-card" style="margin-top:14px;">
+          <h2 style="font-size:18px;">Create Approval Gate</h2>
+          <div class="form-grid">
+            <input id="approvalActionType" placeholder="Action type">
+            <input id="approvalMilestone" placeholder="Milestone ID">
+            <input id="approvalTask" placeholder="Task ID">
+          </div>
+          <textarea id="approvalSummary" placeholder="What should be approved and why?"></textarea>
+          <div class="actions">
+            <button onclick="createApproval()">Create Approval</button>
+          </div>
+        </div>
       </section>
       <section class="panel">
         <h2>Knowledge And Light Evals</h2>
@@ -313,7 +335,7 @@
         .replaceAll("'", "&#39;");
     }
 
-    function prettyText(text, maxLength = 420) {
+    function prettyText(text, maxLength = 520) {
       const value = String(text || "").trim();
       if (!value) return "No data yet.";
       return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
@@ -342,17 +364,19 @@
         <span class="badge">branch: ${escapeHtml(activeBranch)}</span>
         <span class="badge">approvals: ${state.approvals?.enabled ? "enabled" : "optional / off"}</span>
       `;
-      document.getElementById("focusText").innerHTML = `<p>${escapeHtml(prettyText(state.current_md, 700))}</p>`;
+      document.getElementById("focusText").innerHTML = `<p>${escapeHtml(prettyText(state.current_md, 820))}</p>`;
     }
 
     function renderStats(state) {
       const counts = state.task_counts || {};
+      const openRisks = (state.risk_items || []).filter(item => ["open", "watching"].includes(item.status)).length;
       const stats = [
         ["Pending", counts.pending || 0],
         ["Ready", counts.ready || 0],
         ["In Progress", counts.in_progress || 0],
         ["Blocked", counts.blocked || 0],
-        ["Done", counts.done || 0]
+        ["Done", counts.done || 0],
+        ["Open Risks", openRisks]
       ];
       document.getElementById("stats").innerHTML = stats.map(([label, value]) => `
         <div class="stat">
@@ -362,6 +386,20 @@
       `).join("");
     }
 
+    function progressCard(item, meta) {
+      return `
+        <div class="progress-card">
+          <div class="progress-head">
+            <strong>${escapeHtml(item.title || item.id || "Untitled")}</strong>
+            <span class="pill">${escapeHtml(item.status || `${item.percent}%`)}</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:${item.percent || 0}%"></div></div>
+          <p>${escapeHtml(item.delivery_target || item.goal || item.summary || "No summary yet.")}</p>
+          <small>${meta}</small>
+        </div>
+      `;
+    }
+
     function renderMilestones(state) {
       const milestones = state.milestones || [];
       const container = document.getElementById("milestones");
@@ -369,17 +407,23 @@
         container.innerHTML = `<p class="empty">No milestones yet.</p>`;
         return;
       }
-      container.innerHTML = milestones.map(item => `
-        <div class="progress-card">
-          <div class="progress-head">
-            <strong>${escapeHtml(item.id)} · ${escapeHtml(item.title)}</strong>
-            <span class="pill">${escapeHtml(item.status)}</span>
-          </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${item.percent}%"></div></div>
-          <p>${escapeHtml(item.delivery_target || item.goal || "No delivery target yet.")}</p>
-          <small>${item.done_tasks}/${item.total_tasks} tasks done · ${item.in_progress_tasks} active · ${item.blocked_tasks} blocked</small>
-        </div>
-      `).join("");
+      container.innerHTML = milestones.map(item => progressCard(
+        item,
+        `${item.done_tasks}/${item.total_tasks} tasks done · ${item.in_progress_tasks} active · ${item.blocked_tasks} blocked`
+      )).join("");
+    }
+
+    function renderSlices(state) {
+      const slices = state.slices || [];
+      const container = document.getElementById("slices");
+      if (!slices.length) {
+        container.innerHTML = `<p class="empty">No slice data yet. Add optional <code>slice_id</code> values to tasks to group them.</p>`;
+        return;
+      }
+      container.innerHTML = slices.map(item => progressCard(
+        item,
+        `${item.done_tasks}/${item.total_tasks} tasks done · ${item.in_progress_tasks} active · ${item.blocked_tasks} blocked · milestones ${(item.milestone_ids || []).join(", ") || "n/a"}`
+      )).join("");
     }
 
     function renderTable(containerId, headers, rows, emptyText) {
@@ -393,15 +437,48 @@
       container.innerHTML = `<table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table>`;
     }
 
+    function renderRisks(state) {
+      const risks = state.risk_items || [];
+      const container = document.getElementById("risks");
+      if (!risks.length) {
+        const blocked = (state.active_tasks || []).filter(task => task.status === "blocked");
+        if (!blocked.length) {
+          container.innerHTML = `<p class="empty">No explicit risks recorded yet.</p>`;
+          return;
+        }
+        container.innerHTML = blocked.map(task => `
+          <div class="progress-card">
+            <div class="progress-head">
+              <strong>${escapeHtml(task.id || "blocked-task")}</strong>
+              <span class="pill">blocked task</span>
+            </div>
+            <p>${escapeHtml(task.title || "")}</p>
+          </div>
+        `).join("");
+        return;
+      }
+      container.innerHTML = risks.map(risk => `
+        <div class="progress-card">
+          <div class="progress-head">
+            <strong>${escapeHtml(risk.id || "")}</strong>
+            <span class="pill">${escapeHtml(risk.severity || "")} · ${escapeHtml(risk.status || "")}</span>
+          </div>
+          <p>${escapeHtml(risk.summary || "")}</p>
+          <small>Mitigation: ${escapeHtml(risk.mitigation || "not recorded yet")}</small>
+        </div>
+      `).join("");
+    }
+
     function renderActiveTasks(state) {
       const rows = (state.active_tasks || []).map(task => [
         task.id || "",
         task.title || "",
         task.status || "",
+        task.slice_id || "",
         task.assigned_executor || task.owner_role || "",
         task.milestone_id || ""
       ]);
-      renderTable("activeTasks", ["Task", "Title", "Status", "Owner", "Milestone"], rows, "No active tasks right now.");
+      renderTable("activeTasks", ["Task", "Title", "Status", "Slice", "Owner", "Milestone"], rows, "No active tasks right now.");
     }
 
     function renderTrace(state) {
@@ -414,26 +491,32 @@
       container.innerHTML = events.map(event => `
         <div class="event">
           <strong>${escapeHtml(event.event_type || "event")} · ${escapeHtml(event.summary || "")}</strong>
-          <small>${escapeHtml(event.timestamp || "")} · ${escapeHtml(event.phase || "")} · ${escapeHtml(event.role || "")}</small>
+          <small>${escapeHtml(event.timestamp || "")} · ${escapeHtml(event.phase || "")} · ${escapeHtml(event.role || "")} · branch ${escapeHtml(event.branch_id || "n/a")}</small>
         </div>
       `).join("");
     }
 
     function renderCheckpoints(state) {
-      const rows = (state.checkpoints || []).map(item => [
-        item.id || "",
-        item.created_at || "",
-        item.trigger || "",
-        item.summary || "",
-        item.restore_hint || ""
-      ]);
-      renderTable("checkpoints", ["ID", "Created", "Trigger", "Summary", "Restore Hint"], rows, "No checkpoints recorded yet.");
+      const items = (state.checkpoints || []).slice().reverse();
+      const container = document.getElementById("checkpoints");
+      if (!items.length) {
+        container.innerHTML = `<p class="empty">No checkpoints recorded yet.</p>`;
+        return;
+      }
+      container.innerHTML = items.map(item => `
+        <div class="event">
+          <strong>${escapeHtml(item.id)} · ${escapeHtml(item.trigger || "")}</strong>
+          <small>${escapeHtml(item.created_at || "")} · branch ${escapeHtml(item.branch_id || "n/a")} · milestone ${escapeHtml(item.milestone_id || "n/a")}</small>
+          <p>${escapeHtml(item.summary || "")}</p>
+          <small>Restore hint: ${escapeHtml(item.restore_hint || "")}</small>
+        </div>
+      `).join("");
     }
 
     function renderApprovals(state) {
       const approvals = state.approvals || { enabled: false, gates: [] };
       const container = document.getElementById("approvals");
-      if (!approvals.enabled) {
+      if (!approvals.enabled && !(approvals.gates || []).length) {
         container.innerHTML = `<p class="empty">Approvals are disabled by default. Enable them only for higher-risk operations.</p>`;
         return;
       }
@@ -441,7 +524,7 @@
         container.innerHTML = `<p class="empty">No approval gates recorded yet.</p>`;
         return;
       }
-      container.innerHTML = approvals.gates.map(gate => {
+      container.innerHTML = approvals.gates.slice().reverse().map(gate => {
         const pending = gate.status === "pending";
         return `
           <div class="progress-card">
@@ -450,7 +533,7 @@
               <span class="pill">${escapeHtml(gate.status)}</span>
             </div>
             <p>${escapeHtml(gate.summary || "")}</p>
-            <small>${escapeHtml(gate.decision_summary || "")}</small>
+            <small>${escapeHtml(gate.decision_summary || gate.decided_at || "")}</small>
             ${pending ? `
               <div class="actions">
                 <button onclick="approveGate('${escapeHtml(gate.id)}', 'approved')">Approve</button>
@@ -494,6 +577,11 @@
       }
 
       const branchMap = new Map(branches.map(branch => [branch.id, branch]));
+      const checkpointCounts = {};
+      (state.checkpoints || []).forEach(item => {
+        const key = item.branch_id || "main";
+        checkpointCounts[key] = (checkpointCounts[key] || 0) + 1;
+      });
       const depthCache = new Map();
       const depthOf = (branch) => {
         if (depthCache.has(branch.id)) return depthCache.get(branch.id);
@@ -506,19 +594,19 @@
       const nodes = branches.map((branch, index) => ({
         ...branch,
         depth: depthOf(branch),
-        x: 120 + depthOf(branch) * 250,
-        y: 70 + index * 96
+        x: 120 + depthOf(branch) * 280,
+        y: 70 + index * 112
       }));
 
-      const width = Math.max(960, ...nodes.map(node => node.x + 220));
-      const height = Math.max(320, ...nodes.map(node => node.y + 90));
+      const width = Math.max(960, ...nodes.map(node => node.x + 260));
+      const height = Math.max(360, ...nodes.map(node => node.y + 100));
       svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
       const lines = nodes.map(node => {
         if (!node.parent_branch_id || !branchMap.has(node.parent_branch_id)) return "";
         const parent = nodes.find(item => item.id === node.parent_branch_id);
         if (!parent) return "";
-        return `<line x1="${parent.x + 180}" y1="${parent.y + 24}" x2="${node.x}" y2="${node.y + 24}" stroke="rgba(15,118,110,0.45)" stroke-width="3" stroke-linecap="round" />`;
+        return `<line x1="${parent.x + 220}" y1="${parent.y + 32}" x2="${node.x}" y2="${node.y + 32}" stroke="rgba(15,118,110,0.45)" stroke-width="3" stroke-linecap="round" />`;
       }).join("");
 
       const boxes = nodes.map(node => {
@@ -526,10 +614,10 @@
         const stroke = node.status === "active" ? "#0f766e" : node.status === "abandoned" ? "#b91c1c" : "#8b7e6d";
         return `
           <g>
-            <rect x="${node.x}" y="${node.y}" width="188" height="58" rx="18" fill="${fill}" stroke="${stroke}" stroke-width="2"></rect>
+            <rect x="${node.x}" y="${node.y}" width="232" height="76" rx="18" fill="${fill}" stroke="${stroke}" stroke-width="2"></rect>
             <text x="${node.x + 14}" y="${node.y + 22}" font-size="13" font-weight="700" fill="#1b1713">${escapeHtml(node.title || node.id)}</text>
-            <text x="${node.x + 14}" y="${node.y + 40}" font-size="11" fill="#655b4f">${escapeHtml(node.status)} · ${escapeHtml(node.current_milestone_id || "")}</text>
-            <text x="${node.x + 14}" y="${node.y + 54}" font-size="10" fill="#655b4f">${escapeHtml(node.parent_checkpoint_id || "")}</text>
+            <text x="${node.x + 14}" y="${node.y + 42}" font-size="11" fill="#655b4f">${escapeHtml(node.status)} · milestone ${escapeHtml(node.current_milestone_id || "")}</text>
+            <text x="${node.x + 14}" y="${node.y + 58}" font-size="10" fill="#655b4f">parent cp ${escapeHtml(node.parent_checkpoint_id || "root")} · checkpoints ${(checkpointCounts[node.id] || 0)}</text>
           </g>
         `;
       }).join("");
@@ -552,6 +640,42 @@
       await refresh();
     }
 
+    async function createCheckpoint() {
+      const summary = document.getElementById("checkpointSummary").value.trim();
+      if (!summary) {
+        window.alert("Checkpoint summary is required.");
+        return;
+      }
+      await postJson("/api/checkpoint/create", {
+        summary,
+        trigger: document.getElementById("checkpointTrigger").value.trim() || "manual_control_plane",
+        milestone_id: document.getElementById("checkpointMilestone").value.trim(),
+        task_id: document.getElementById("checkpointTask").value.trim(),
+        restore_hint: document.getElementById("checkpointRestoreHint").value.trim()
+      });
+      document.getElementById("checkpointSummary").value = "";
+      document.getElementById("checkpointRestoreHint").value = "";
+      await refresh();
+    }
+
+    async function createApproval() {
+      const actionType = document.getElementById("approvalActionType").value.trim();
+      const summary = document.getElementById("approvalSummary").value.trim();
+      if (!actionType || !summary) {
+        window.alert("Approval action type and summary are required.");
+        return;
+      }
+      await postJson("/api/approval/create", {
+        action_type: actionType,
+        summary,
+        milestone_id: document.getElementById("approvalMilestone").value.trim(),
+        task_id: document.getElementById("approvalTask").value.trim()
+      });
+      document.getElementById("approvalActionType").value = "";
+      document.getElementById("approvalSummary").value = "";
+      await refresh();
+    }
+
     async function activateBranch(id) {
       await postJson("/api/branch/activate", { id });
       await refresh();
@@ -563,6 +687,8 @@
         renderHero(state);
         renderStats(state);
         renderMilestones(state);
+        renderSlices(state);
+        renderRisks(state);
         renderActiveTasks(state);
         renderTrace(state);
         renderCheckpoints(state);

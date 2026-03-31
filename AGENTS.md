@@ -16,6 +16,7 @@ execution.
 - Maintain structured progress visibility through `.codex-harness/observability/trace.ndjson` and refresh the HTML dashboard when milestone state changes materially.
 - Prefer the web control plane as the live governance surface for progress, traces, checkpoints, branches, and approvals.
 - Keep primary user input in the Codex client unless a future project explicitly adopts a different conversational surface.
+- Use the control plane to expose milestone progress, slice progress, risk state, checkpoint timeline, branch graph, and optional approval actions in one place.
 - Capture checkpoints before major milestone transitions, before risky repairs, and before meaningful handoffs.
 - Treat human approval as an optional gate. Use it only when the project or user explicitly enables approval-sensitive operations.
 - Distinguish project memory from reusable knowledge. Record cross-project lessons, patterns, and validated practices in the knowledge index.

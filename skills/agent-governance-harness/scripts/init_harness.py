@@ -58,6 +58,8 @@ def main() -> int:
     branches_dir.mkdir(parents=True, exist_ok=True)
     knowledge_dir = harness_dir / "knowledge"
     knowledge_dir.mkdir(parents=True, exist_ok=True)
+    risks_dir = harness_dir / "risks"
+    risks_dir.mkdir(parents=True, exist_ok=True)
     evals_dir = harness_dir / "evals"
     evals_dir.mkdir(parents=True, exist_ok=True)
     dashboard_dir = harness_dir / "dashboard"
@@ -88,6 +90,7 @@ def main() -> int:
     approvals = render_template(references_dir / "approvals.json", replacements)
     branches = render_template(references_dir / "branches.json", replacements)
     knowledge_index = render_template(references_dir / "knowledge-index.json", replacements)
+    risk_register = render_template(references_dir / "risk-register.json", replacements)
     eval_suite = render_template(references_dir / "eval-suite.json", replacements)
 
     write_if_missing(harness_dir / "project.md", project_md, args.force)
@@ -105,6 +108,7 @@ def main() -> int:
     write_if_missing(approvals_dir / "approvals.json", approvals, args.force)
     write_if_missing(branches_dir / "branches.json", branches, args.force)
     write_if_missing(knowledge_dir / "knowledge-index.json", knowledge_index, args.force)
+    write_if_missing(risks_dir / "risk-register.json", risk_register, args.force)
     write_if_missing(evals_dir / "eval-suite.json", eval_suite, args.force)
 
     print(f"Initialized harness at {harness_dir}")

@@ -51,6 +51,10 @@ file = ".codex-harness/approvals/approvals.json"
 enabled = true
 file = ".codex-harness/knowledge/knowledge-index.json"
 
+[risks]
+enabled = true
+file = ".codex-harness/risks/risk-register.json"
+
 [evals]
 enabled = true
 mode = "light"

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from datetime import datetime, timezone
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -61,6 +62,11 @@ def parse_ndjson(path: Path) -> list[dict]:
     return events[-100:]
 
 
+def slugify(value: str) -> str:
+    cleaned = re.sub(r"[^a-zA-Z0-9]+", "-", value.strip().lower()).strip("-")
+    return cleaned or "item"
+
+
 def find_active_milestone(backlog: dict) -> dict | None:
     milestones = backlog.get("milestones", [])
     for status in ("in_progress", "ready", "pending", "blocked", "done"):
@@ -76,6 +82,39 @@ def task_counts(features: list[dict]) -> dict[str, int]:
         status = str(feature.get("status", "pending"))
         counts[status] = counts.get(status, 0) + 1
     return counts
+
+
+def slice_progress(features: list[dict]) -> list[dict]:
+    slices: dict[str, dict] = {}
+    for feature in features:
+        slice_id = str(feature.get("slice_id", "")).strip() or "unsliced"
+        item = slices.setdefault(slice_id, {
+            "id": slice_id,
+            "title": slice_id.replace("-", " ").title() if slice_id != "unsliced" else "Unassigned Slice",
+            "total_tasks": 0,
+            "done_tasks": 0,
+            "in_progress_tasks": 0,
+            "blocked_tasks": 0,
+            "milestone_ids": set()
+        })
+        item["total_tasks"] += 1
+        status = feature.get("status")
+        if status == "done":
+            item["done_tasks"] += 1
+        if status == "in_progress":
+            item["in_progress_tasks"] += 1
+        if status == "blocked":
+            item["blocked_tasks"] += 1
+        if feature.get("milestone_id"):
+            item["milestone_ids"].add(str(feature.get("milestone_id")))
+
+    results = []
+    for item in slices.values():
+        total = item["total_tasks"]
+        item["percent"] = int((item["done_tasks"] / total) * 100) if total else 0
+        item["milestone_ids"] = sorted(item["milestone_ids"])
+        results.append(item)
+    return sorted(results, key=lambda entry: (entry["id"] != "unsliced", entry["id"]))
 
 
 def milestone_progress(milestone: dict, features: list[dict]) -> dict:
@@ -118,6 +157,7 @@ def load_state(root: Path) -> dict:
     checkpoints = read_json(harness / "checkpoints" / "checkpoints.json", {"checkpoints": []})
     evals = read_json(harness / "evals" / "eval-suite.json", {"cases": []})
     knowledge = read_json(harness / "knowledge" / "knowledge-index.json", {"items": []})
+    risks = read_json(harness / "risks" / "risk-register.json", {"items": []})
     trace = parse_ndjson(harness / "observability" / "trace.ndjson")
     memory_index = read_json(harness / "memory" / "memory-index.json", {})
 
@@ -137,6 +177,7 @@ def load_state(root: Path) -> dict:
         "memory_index": memory_index,
         "active_milestone": active_milestone,
         "milestones": progress,
+        "slices": slice_progress(features),
         "task_counts": task_counts(features),
         "active_tasks": active_tasks(features),
         "trace_events": trace,
@@ -145,6 +186,7 @@ def load_state(root: Path) -> dict:
         "branches": branches.get("branches", []),
         "active_branch": active_branch,
         "knowledge_items": knowledge.get("items", [])[-20:],
+        "risk_items": risks.get("items", [])[-20:],
         "eval_cases": evals.get("cases", [])[-20:]
     }
 
@@ -189,6 +231,73 @@ def activate_branch(root: Path, payload: dict) -> dict:
     selected["status"] = "active"
     write_json(branches_path, data)
     return selected
+
+
+def create_checkpoint(root: Path, payload: dict) -> dict:
+    harness = root / ".codex-harness"
+    checkpoints_path = harness / "checkpoints" / "checkpoints.json"
+    data = read_json(checkpoints_path, {"version": 1, "project": root.name, "checkpoints": []})
+    summary = str(payload.get("summary", "")).strip()
+    if not summary:
+        raise ValueError("Checkpoint summary is required.")
+    trigger = str(payload.get("trigger", "manual_control_plane")).strip() or "manual_control_plane"
+    restore_hint = str(payload.get("restore_hint", "")).strip() or "Resume from current milestone state."
+    milestone_id = str(payload.get("milestone_id", "")).strip()
+    task_id = str(payload.get("task_id", "")).strip()
+    branch_id = str(payload.get("branch_id", "")).strip()
+    checkpoint_id = payload.get("id")
+    if not checkpoint_id:
+        base = slugify(summary)[:24]
+        checkpoint_id = f"cp-{base}-{len(data.get('checkpoints', [])) + 1}"
+
+    checkpoint = {
+        "id": checkpoint_id,
+        "created_at": utc_now(),
+        "trigger": trigger,
+        "summary": summary,
+        "restore_hint": restore_hint
+    }
+    if milestone_id:
+        checkpoint["milestone_id"] = milestone_id
+    if task_id:
+        checkpoint["task_id"] = task_id
+    if branch_id:
+        checkpoint["branch_id"] = branch_id
+
+    data.setdefault("checkpoints", []).append(checkpoint)
+    write_json(checkpoints_path, data)
+    return checkpoint
+
+
+def create_approval(root: Path, payload: dict) -> dict:
+    harness = root / ".codex-harness"
+    approvals_path = harness / "approvals" / "approvals.json"
+    data = read_json(approvals_path, {"version": 1, "project": root.name, "enabled": False, "gates": []})
+    summary = str(payload.get("summary", "")).strip()
+    action_type = str(payload.get("action_type", "")).strip()
+    if not summary or not action_type:
+        raise ValueError("Approval action_type and summary are required.")
+    gate_id = payload.get("id")
+    if not gate_id:
+        base = slugify(action_type)[:24]
+        gate_id = f"ap-{base}-{len(data.get('gates', [])) + 1}"
+    data["enabled"] = True
+    gate = {
+        "id": gate_id,
+        "requested_at": utc_now(),
+        "status": "pending",
+        "action_type": action_type,
+        "summary": summary
+    }
+    milestone_id = str(payload.get("milestone_id", "")).strip()
+    task_id = str(payload.get("task_id", "")).strip()
+    if milestone_id:
+        gate["milestone_id"] = milestone_id
+    if task_id:
+        gate["task_id"] = task_id
+    data.setdefault("gates", []).append(gate)
+    write_json(approvals_path, data)
+    return gate
 
 
 class ControlPlaneHandler(BaseHTTPRequestHandler):
@@ -241,8 +350,16 @@ class ControlPlaneHandler(BaseHTTPRequestHandler):
                 result = update_approval(self.root, payload)
                 self._send_json({"ok": True, "result": result})
                 return
+            if parsed.path == "/api/approval/create":
+                result = create_approval(self.root, payload)
+                self._send_json({"ok": True, "result": result})
+                return
             if parsed.path == "/api/branch/activate":
                 result = activate_branch(self.root, payload)
+                self._send_json({"ok": True, "result": result})
+                return
+            if parsed.path == "/api/checkpoint/create":
+                result = create_checkpoint(self.root, payload)
                 self._send_json({"ok": True, "result": result})
                 return
             self.send_error(HTTPStatus.NOT_FOUND, "Not found")

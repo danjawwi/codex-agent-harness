@@ -247,6 +247,7 @@ The default project runtime artifacts are:
 - `.codex-harness/approvals/approvals.json`
 - `.codex-harness/branches/branches.json`
 - `.codex-harness/knowledge/knowledge-index.json`
+- `.codex-harness/risks/risk-register.json`
 - `.codex-harness/evals/eval-suite.json`
 
 These files make the project resumable and reviewable across compaction, session changes, and long
@@ -262,6 +263,7 @@ This harness now includes first-pass versions of five additional operational lay
 - `optional human approval`: a switchable gate for releases, destructive changes, or other approval-sensitive actions
 - `knowledge and retrieval`: reusable cross-project knowledge distinct from per-project memory
 - `live control plane`: a polling-based web interface for current progress, milestones, traces, branches, checkpoints, and approvals
+- `risk register`: a lightweight file-backed place to surface active risks in the governance UI
 
 ## Repository Scope
 
@@ -410,6 +412,50 @@ Then open:
 http://127.0.0.1:8765
 ```
 
+The current control plane supports:
+
+- milestone and slice progress
+- task status overview
+- risk zone
+- trace timeline
+- checkpoint timeline
+- branch graph
+- optional approval actions
+- creating checkpoints from the page
+- creating approval gates from the page
+
+## Reuse On Another Codex Client
+
+Because this governance system is stored in GitHub, another Codex client on another machine can
+reuse it directly.
+
+The simplest path is:
+
+```bash
+git clone https://github.com/danjawwi/codex-agent-harness.git ~/.codex/repos/codex-agent-harness
+bash ~/.codex/repos/codex-agent-harness/scripts/install.sh
+```
+
+To update an existing installation on another machine:
+
+```bash
+git -C ~/.codex/repos/codex-agent-harness pull --ff-only
+bash ~/.codex/repos/codex-agent-harness/scripts/install.sh
+```
+
+If the GitHub repository is private, make sure that machine already has working HTTPS access to the
+repository before running the clone or pull step.
+
+What this gives the other machine:
+
+- the same global `AGENTS.md`
+- the same installed harness skill under `~/.codex/skills/agent-governance-harness/`
+- the same initializer, dashboard, and control-plane scripts
+- the same governance references, templates, schemas, and orchestration docs
+
+In practice, that means another Codex client can adopt the same governance model without manually
+copying prompts or files.
+
 ## Memory Strategy
 
 This harness now treats memory as a first-class project artifact.
@@ -460,8 +506,9 @@ The current display strategy is:
 - write structured events to `observability/trace.ndjson`
 - maintain checkpoints and approvals as structured JSON artifacts
 - maintain branch state in `branches/branches.json`
+- maintain active risks in `risks/risk-register.json`
 - generate a static HTML dashboard that summarizes milestone state, task counts, logs, traces, checkpoints, approvals, knowledge items, and light eval status
-- provide a live browser control plane with milestone progress, task progress, trace timeline, checkpoint view, branch graph, and optional approval actions
+- provide a live browser control plane with milestone progress, slice progress, risk zone, task progress, trace timeline, checkpoint view, branch graph, and optional approval actions
 
 This is the first version of a human-readable progress surface for long-running Codex work.
 
@@ -480,6 +527,8 @@ This creates a clean separation:
 
 That split is intentional. It keeps the strongest input modality inside Codex while making the
 current state of long-running work visible in a dedicated control plane.
+
+This also means the control plane does not need to replace Codex. It complements it.
 
 ## Near-Term Evolution
 

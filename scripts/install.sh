@@ -29,6 +29,7 @@ chmod +x "$CODEX_HOME/skills/agent-governance-harness/scripts/sync_harness_memor
 chmod +x "$CODEX_HOME/skills/agent-governance-harness/scripts/render_progress_dashboard.py"
 chmod +x "$CODEX_HOME/skills/agent-governance-harness/scripts/serve_control_plane.py"
 chmod +x "$REPO_ROOT/scripts/sync-harness-memory.sh"
+chmod +x "$REPO_ROOT/scripts/bootstrap-from-github.sh"
 chmod +x "$REPO_ROOT/skills/agent-governance-harness/scripts/sync_harness_memory.sh"
 chmod +x "$REPO_ROOT/skills/agent-governance-harness/scripts/render_progress_dashboard.py"
 chmod +x "$REPO_ROOT/skills/agent-governance-harness/scripts/serve_control_plane.py"

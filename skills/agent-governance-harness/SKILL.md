@@ -50,6 +50,7 @@ Open these only when needed:
 - `references/roles/`: role contracts for Project Manager, Requirements Manager, Executor, Inspector, and Recorder
 - `references/schemas/backlog.schema.json`: backlog and milestone structure
 - `references/schemas/branch-graph.schema.json`: branch graph and fork display contract
+- `references/schemas/risk-register.schema.json`: active risk register contract
 - `references/schemas/trace-event.schema.json`: structured trace event contract
 - `references/schemas/checkpoint-index.schema.json`: checkpoint index contract
 - `references/schemas/approval-gates.schema.json`: optional approval gate contract
@@ -83,6 +84,7 @@ Default files:
 - `approvals/approvals.json`: optional approval-gate records
 - `branches/branches.json`: branch graph records for execution forks and active line display
 - `knowledge/knowledge-index.json`: reusable cross-project knowledge records
+- `risks/risk-register.json`: active risk register for dashboard and review
 - `evals/eval-suite.json`: lightweight milestone eval cases
 
 To synchronize `.codex-harness/` through GitHub when needed:
@@ -101,6 +103,7 @@ Recommended setup:
 
 - keep primary task input in the Codex client
 - keep the browser control plane open on another screen for governance visibility and optional approval actions
+- use the control plane for approval decisions, checkpoint creation, progress review, and branch understanding
 
 ## Initializer
 
